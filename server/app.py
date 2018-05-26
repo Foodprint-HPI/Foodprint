@@ -50,16 +50,22 @@ def upload_picture():
         hash_value = xxhash.xxh64(content).hexdigest()
 
         filename = f'/tmp/images/{hash_value}.jpg'
-        if not os.path.exists(filename):
-            filename = photos.save(
-                request.files['photo'],
-                name=filename
-            )
-            meal = Meal(recipe="", picture=filename)
-            print("meal created", meal)
-            # db.session.add(meal)
-            # db.session.commit()
+
+        if os.path.exists(filename):
+            existing_meal = Meal.query.filter(picture=hash_value).first()
+            Meal(recipe="", picture=hash_value, dish_id=existing_meal.id)
+            return
+
+        photos.save(
+            request.files['photo'],
+            name=filename
+        )
+        meal = Meal(recipe="", picture=hash_value)
+        print("meal created", meal)
+        db.session.add(meal)
+        db.session.commit()
         labels = MealMatcher.query_labels(hash_value)
+        validate_labels(meal, labels)
         return jsonify(status=201)
     return jsonify(status=204)
 
@@ -94,14 +100,64 @@ if __name__ == '__main__':
     app.run(debug=True)
 
 
+def validate_labels(meal, labels):
+    for label in labels:
+        updated_meal = match_dish(meal, label)
+        if updated_meal:
+            return
+
+
+def calculate_footprint(dish: dict):
+    carbon_sum = 0
+    for ingredient, count in dish.items():
+        carbon_sum += CO2_MAP_IN_KG[ingredient] * count
+    return carbon_sum
+
+
 def match_dish(meal: Meal, name: str):
-    if not meal:
-        raise ValueError('A meal is required')
     if not name:
         raise ValueError('A dish name is required')
-    matched_dish = Dish.query.filter_by(Dish.name.like(f'%{name}%')).first()
+    if Dish.query.filter(name=name).count():
+        matched_dish = Dish.query.filter(name=name).first()
+    else:
+        dish = RECOGNIZED_DISHES[name]
+        matched_dish = Dish(name=name, co2=calculate_footprint(dish))
+        db.session.commit()
     if not matched_dish:
         print(f'Unable to match {name}')
         return
     meal.recipe = matched_dish.id
     db.session.commit()
+    return meal
+
+
+CO2_MAP_IN_KG = {
+    'beef': 27.0,
+    'noodles': 2.9,
+    'onion': 2.9,
+    'tomato': 1.2,
+    'potatoe': 1.1,
+    'egg': 4.8,
+    'milk': 1.9,
+    'flour': 0.6,
+    'sugar': 3.8
+}
+
+RECOGNIZED_DISHES = {
+    'Spaghetti Bolognese': {
+        'beef': 0.15,
+        'noodles': 0.15,
+        'tomato': 0.05,
+        'onion': 0.02,
+    },
+    'Schnitzel': {
+        'beef': 0.3,
+        'potatoe': 0.25
+    },
+    'Pancakes': {
+        'sugar': 0.05,
+        'egg': 0.2,
+        'flour': 0.2,
+        'milk': 0.6
+    }
+}
