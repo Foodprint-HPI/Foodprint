@@ -1,19 +1,35 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import {
+  BrowserRouter as Router,
+  Route,
+  Link
+} from 'react-router-dom';
+import Recorder from './Recorder';
+import Statistics from './Statistics';
 import './App.css';
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
+      <Router>
+        <div>
+          <nav class="uk-navbar-container" uk-navbar>
+            <div class="uk-navbar-left">
+                <ul class="uk-navbar-nav">
+                    <li class="uk-active">
+                      <Link to="/">Recorder</Link>
+                    </li>
+                    <li>
+                      <Link to="/statistics">Statistics</Link>
+                    </li>
+                </ul>
+            </div>
+          </nav>
+
+          <Route exact path="/" component={Recorder}/>
+          <Route path="/statistics" component={Statistics}/>
+        </div>
+      </Router>
     );
   }
 }
