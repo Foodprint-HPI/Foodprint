@@ -1,1 +1,1 @@
-python: cd server && pip install -r ../requirements.txt && gunicorn app:app --log-file=-
+python: ./run.sh
