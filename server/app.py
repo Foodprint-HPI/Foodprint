@@ -111,6 +111,20 @@ def reset():
     return jsonify({'success': True})
 
 
+@app.route('/api/v1/week/now', methods=['POST'])
+def weekly_sum():
+    # grouped = request.form['grouped']
+
+    QUERY = """
+        SELECT SUM(dish.co2)
+        FROM dish, meal
+        WHERE dish.id = meal.id
+        AND extract('week' from created) = extract('week' from CURRENT_TIMESTAMP)
+    """
+    result = db.engine.execute(QUERY)
+    return jsonify({'result': result})
+
+
 def validate_labels(meal, labels):
     for label in labels:
         updated_meal = match_dish(meal, label['description'])
