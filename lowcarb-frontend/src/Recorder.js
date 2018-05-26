@@ -1,243 +1,186 @@
 import React, { Component } from 'react';
-import './App.css';
+import './Recorder.css';
 
 class Recorder extends Component {
 
   constructor(props) {
     super(props);
     this.startCamera = this.startCamera.bind(this);
+    this.takePhoto = this.takePhoto.bind(this);
+    this.displayErrorMessage = this.displayErrorMessage.bind(this);
+    this.deletePhoto = this.deletePhoto.bind(this);
+    this.takeSnapshot = this.takeSnapshot.bind(this);
+    this.sendPhoto = this.sendPhoto.bind(this);
+    this.state = {
+      errorMessage: ""
+    }
   }
-/*
+
   componentDidMount() {
     // The getUserMedia interface is used for handling camera input.
     // Some browsers need a prefix so here we're covering all the options
     navigator.getMedia = ( navigator.getUserMedia ||
-    navigator.webkitGetUserMedia ||
-    navigator.mozGetUserMedia ||
-    navigator.msGetUserMedia);
+      navigator.webkitGetUserMedia ||
+      navigator.mozGetUserMedia ||
+      navigator.msGetUserMedia);
 
 
-    if(!navigator.getMedia){
-        alert("Your browser doesn't have support for the navigator.getUserMedia interface.");
-    }
-    else{
+      if (!navigator.getMedia) {
+        this.displayErrorMessage("Your browser doesn't have support for the navigator.getUserMedia interface.");
+      } else{
 
         // Request the camera.
-        navigator.getMedia(
-            {
-                video: true
-            },
-            // Success Callback
-            function(stream){
+        navigator.getMedia({
+          video: true
+        },
 
-                // Create an object URL for the video stream and
-                // set it as src of our HTLM video element.
-                video.src = window.URL.createObjectURL(stream);
+        // Success callback
+        function(stream) {
+          this.refs.cameraStream.src = window.URL.createObjectURL(stream);
 
-                // Play the video element to start the stream.
-                video.play();
-
-
-            },
-            // Error Callback
-            function(err){
-                displayErrorMessage("There was an error with accessing the camera stream: " + err.name, err);
-            }
-        );
+          // Play the video element to start the stream.
+          this.refs.cameraStream.play();
+        }.bind(this),
+        // Error Callback
+        function(err){
+          this.displayErrorMessage("There was an error with accessing the camera stream: " + err.name, err);
+        }.bind(this)
+      );
 
     }
   }
 
   startCamera(event) {
     event.preventDefault();
-    this.video.play();
+    this.refs.startButton.classList.remove("visible")
+    this.refs.cameraStream.play();
     this.showVideo();
   }
-  /*
-  document.addEventListener('DOMContentLoaded', function () {
 
-    // References to all the element we will need.
-    var video = document.querySelector('#camera-stream'),
-        image = document.querySelector('#snap'),
-        start_camera = document.querySelector('#start-camera'),
-        controls = document.querySelector('.controls'),
-        take_photo_btn = document.querySelector('#take-photo'),
-        delete_photo_btn = document.querySelector('#delete-photo'),
-        download_photo_btn = document.querySelector('#download-photo'),
-        error_message = document.querySelector('#error-message');
-
-
-    // The getUserMedia interface is used for handling camera input.
-    // Some browsers need a prefix so here we're covering all the options
-    navigator.getMedia = ( navigator.getUserMedia ||
-    navigator.webkitGetUserMedia ||
-    navigator.mozGetUserMedia ||
-    navigator.msGetUserMedia);
-
-
-    if(!navigator.getMedia){
-        displayErrorMessage("Your browser doesn't have support for the navigator.getUserMedia interface.");
-    }
-    else{
-
-        // Request the camera.
-        navigator.getMedia(
-            {
-                video: true
-            },
-            // Success Callback
-            function(stream){
-
-                // Create an object URL for the video stream and
-                // set it as src of our HTLM video element.
-                video.src = window.URL.createObjectURL(stream);
-
-                // Play the video element to start the stream.
-                video.play();
-
-
-            },
-            // Error Callback
-            function(err){
-                displayErrorMessage("There was an error with accessing the camera stream: " + err.name, err);
-            }
-        );
-
-    }
-
-
-
-    // Mobile browsers cannot play video without user input,
-    // so here we're using a button to start it manually.
-    start_camera.addEventListener("click", function(e){
-
-        e.preventDefault();
-
-        // Start video playback manually.
-        video.play();
-        showVideo();
-
+  displayErrorMessage(text) {
+    this.setState({
+      errorMessage: text
     });
+  }
 
+  takePhoto(event) {
+    event.preventDefault();
 
-    take_photo_btn.addEventListener("click", function(e){
-
-        e.preventDefault();
-
-        var snap = takeSnapshot();
-
-        // Show image.
-        image.setAttribute('src', snap);
-        image.classList.add("visible");
-
-        // Enable delete and save buttons
-        delete_photo_btn.classList.remove("disabled");
-        download_photo_btn.classList.remove("disabled");
-
-        // Set the href attribute of the download button to the snap url.
-        download_photo_btn.href = snap;
-
-        // Pause video playback of stream.
-        video.pause();
-
-    });
-
-
-    delete_photo_btn.addEventListener("click", function(e){
-
-        e.preventDefault();
-
-        // Hide image.
-        image.setAttribute('src', "");
-        image.classList.remove("visible");
-
-        // Disable delete and save buttons
-        delete_photo_btn.classList.add("disabled");
-        download_photo_btn.classList.add("disabled");
-
-        // Resume playback of stream.
-        video.play();
-
-    });
-
-
-
-    function showVideo(){
-        // Display the video stream and the controls.
-
-        hideUI();
-        video.classList.add("visible");
-        controls.classList.add("visible");
+    if (this.refs.sendPhoto.classList.contains("green")) {
+      return
     }
 
-
-    function takeSnapshot(){
-        // Here we're using a trick that involves a hidden canvas element.
-
-        var hidden_canvas = document.querySelector('canvas'),
-            context = hidden_canvas.getContext('2d');
-
-        var width = video.videoWidth,
-            height = video.videoHeight;
-
-        if (width && height) {
-
-            // Setup a canvas with the same dimensions as the video.
-            hidden_canvas.width = width;
-            hidden_canvas.height = height;
-
-            // Make a copy of the current frame in the video on the canvas.
-            context.drawImage(video, 0, 0, width, height);
-
-            // Turn the canvas image into a dataURL that can be used as a src for our photo.
-            return hidden_canvas.toDataURL('image/png');
-        }
+    if (!this.refs.deletePhoto.classList.contains("disabled")) {
+      if (this.refs.sendPhoto.classList.contains("red")) {
+        this.refs.sendPhoto.classList.remove("red");
+      }
+      this.deletePhoto(null);
+      return
     }
 
+    const snap = this.takeSnapshot();
 
-    function displayErrorMessage(error_msg, error){
-        error = error || "";
-        if(error){
-            console.error(error);
-        }
+    // Show image.
+    this.refs.image.setAttribute('src', snap);
+    this.refs.image.classList.add("visible");
 
-        error_message.innerText = error_msg;
+    // Enable delete and save buttons
+    this.refs.deletePhoto.classList.remove("disabled");
+    this.refs.sendPhoto.classList.remove("disabled");
+    // Pause video playback of stream.
+    this.refs.cameraStream.pause();
+  }
 
-        hideUI();
-        error_message.classList.add("visible");
+  deletePhoto(event) {
+    if (event) {
+      event.preventDefault();
     }
 
+    // Hide image.
+    this.refs.image.setAttribute('src', "");
+    this.refs.image.classList.remove("visible");
 
-    function hideUI(){
-        // Helper function for clearing the app UI.
+    // Disable delete and save buttons
+    this.refs.deletePhoto.classList.add("disabled");
+    this.refs.sendPhoto.classList.add("disabled");
 
-        controls.classList.remove("visible");
-        start_camera.classList.remove("visible");
-        video.classList.remove("visible");
-        snap.classList.remove("visible");
-        error_message.classList.remove("visible");
+    // Resume playback of stream.
+    this.refs.cameraStream.play();
+  }
+
+  showVideo(){
+    // Display the video stream and the controls.
+    this.refs.cameraStream.classList.add("visible");
+    this.refs.controls.classList.add("visible");
+  }
+
+  takeSnapshot() {
+    // Here we're using a trick that involves a hidden canvas element.
+
+    const hidden_canvas = this.refs.canvas,
+    context = hidden_canvas.getContext('2d');
+
+    const width = this.refs.cameraStream.videoWidth,
+    height = this.refs.cameraStream.videoHeight;
+
+    if (width && height) {
+
+      // Setup a canvas with the same dimensions as the video.
+      hidden_canvas.width = width;
+      hidden_canvas.height = height;
+
+      // Make a copy of the current frame in the video on the canvas.
+      context.drawImage(this.refs.cameraStream, 0, 0, width, height);
+
+      // Turn the canvas image into a dataURL that can be used as a src for our photo.
+      return hidden_canvas.toDataURL('image/png');
     }
+  }
 
-});
-*/
+  sendPhoto() {
+    const imageSrc = this.refs.image.src;
+    console.log(imageSrc);
+    var data = new FormData();
+    data.append('photo', imageSrc);
+
+    fetch('https://veggiefy.herokuapp.com/upload', {
+      method: 'POST',
+      body: data
+    }).then(response => {
+      console.log(response);
+      if (response.status === 200) {
+        this.refs.sendPhoto.classList.add("green");
+      } else {
+        this.refs.sendPhoto.classList.add("red");
+      }
+    }).catch(error => {
+      console.error('Error:', error);
+      this.displayErrorMessage("Image could not be sent to server");
+    })
+  }
 
   render() {
     return (
-      <div class="app">
+      <div className="app container">
 
-        <a href="#" id="start-camera" class="visible" onClick={this.startCamera}>Touch here to start the app.</a>
-        <video id="camera-stream"></video>
-        <img id="snap" />
-
-        <p id="error-message"></p>
-
-        <div class="controls">
-          <a href="#" id="delete-photo" title="Delete Photo" class="disabled"><i class="material-icons">delete</i></a>
-          <a href="#" id="take-photo" title="Take Photo"><i class="material-icons">camera_alt</i></a>
-        </div>
-
-        <!-- Hidden canvas element. Used for taking snapshot of video. -->
-        <canvas></canvas>
+      <a href="#" id="start-camera" className="visible" onClick={this.startCamera} ref="startButton">Touch here to start the camera.</a>
+      <div style={{"position": "relative"}}>
+      <video id="camera-stream" ref="cameraStream"></video>
+      <img ref="image" id="snap" />
+      </div>
+      <div style={{"position": "relative"}}>
+      <div className="controls" ref="controls">
+      <a href="#" id="delete-photo" title="Delete Photo" className="disabled" onClick={this.deletePhoto} ref="deletePhoto"><i className="far fa-trash-alt"></i></a>
+      <a href="#" id="take-photo" title="Take Photo" onClick={this.takePhoto} ref="takePhoto"><i className="fas fa-camera"></i></a>
+      <a href="#" id="send-photo" title="Save to Cloud" className="disabled" onClick={this.sendPhoto} ref="sendPhoto"><i className="fas fa-upload"></i></a>
+      </div>
+      <canvas ref="canvas"></canvas>
+      </div>
+            <div style={{"position": "relative"}}>
+      <div ref="errorMessage" id="error-message">
+        {this.state.errorMessage}
+      </div>
+</div>
       </div>
     );
   }
