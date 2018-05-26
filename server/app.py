@@ -1,4 +1,5 @@
 import os
+import shutil
 
 import xxhash
 from flask import (
@@ -65,7 +66,6 @@ def upload_picture():
             name=filename
         )
         meal = Meal(recipe="", picture=hash_value)
-        print("meal created", meal)
         db.session.add(meal)
         db.session.commit()
         labels = MealMatcher.query_labels(hash_value)
@@ -79,7 +79,6 @@ def meal_add():
     if request.method == 'POST' and 'recipe' in request.form:
         recipe = request.form['recipe']
         meal = Meal(recipe=recipe, picture="")
-        print("meal created", meal)
         db.session.add(meal)
         db.session.commit()
         return jsonify(status=201), 201
@@ -108,6 +107,7 @@ def get_meal(meal_id):
 def reset():
     db.engine.execute("DELETE FROM meal;"),
     db.engine.execute("DELETE FROM dish;"),
+    shutil.rmtree('/tmp/images')
     return jsonify({'success': True})
 
 
