@@ -1,1 +1,1 @@
-python: ./run.sh
+python: bash ./run.sh
