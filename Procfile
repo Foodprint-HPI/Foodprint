@@ -1,1 +1,1 @@
-web: honcho -f ProcfileHoncho start
+web: cd lowcarb-frontend && npm install && npm start
