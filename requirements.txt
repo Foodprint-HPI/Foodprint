@@ -1,6 +1,5 @@
 Flask
 gunicorn
-honcho
 flask-cors
 google-cloud-vision
 flask-heroku

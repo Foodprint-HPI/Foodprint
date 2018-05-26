@@ -1,1 +1,1 @@
-web: honcho -f ProcfileHoncho start
+web: bash ./run.sh
