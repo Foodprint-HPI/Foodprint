@@ -5,3 +5,10 @@ flask-cors
 google-api-python-client
 flask-heroku
 Flask-Uploads
+requests
+bs4
+alembic
+Flask-Migrate
+Flask-Script
+Flask-SQLAlchemy
+psycopg2
