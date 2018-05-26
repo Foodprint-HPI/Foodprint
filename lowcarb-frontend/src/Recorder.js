@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './Recorder.css';
+import UIKit from 'uikit';
 
 class Recorder extends Component {
 
@@ -11,9 +12,19 @@ class Recorder extends Component {
     this.deletePhoto = this.deletePhoto.bind(this);
     this.takeSnapshot = this.takeSnapshot.bind(this);
     this.sendPhoto = this.sendPhoto.bind(this);
+    this.handleMealChange = this.handleMealChange.bind(this);
+    this.availableMeals = ["Breakfast", "Lunch", "Coffee", "Dinner", "Other"];
     this.state = {
-      errorMessage: ""
+      errorMessage: "",
+      meal: "Coffee",
+      mealSelectionActive: true
     }
+  }
+
+  handleMealChange(newMeal) {
+    this.setState({
+      meal: newMeal
+    });
   }
 
   componentDidMount() {
@@ -65,7 +76,9 @@ class Recorder extends Component {
 
   takePhoto(event) {
     event.preventDefault();
-
+    this.setState({
+      mealSelectionActive: false
+    });
     if (this.refs.sendPhoto.classList.contains("green")) {
       return
     }
@@ -94,6 +107,22 @@ class Recorder extends Component {
   deletePhoto(event) {
     if (event) {
       event.preventDefault();
+    }
+
+    this.setState({
+      mealSelectionActive: true
+    });
+
+    if (this.refs.deletePhoto.classList.contains("disabled")) {
+      return
+    }
+
+    if (this.refs.sendPhoto.classList.contains("red")) {
+      this.refs.sendPhoto.classList.remove("red");
+    }
+
+    if (this.refs.sendPhoto.classList.contains("green")) {
+      return
     }
 
     // Hide image.
@@ -139,9 +168,17 @@ class Recorder extends Component {
 
   sendPhoto() {
     const imageSrc = this.refs.image.src;
-    console.log(imageSrc);
+    var blobBin = atob(imageSrc.split(',')[1]);
+    var array = [];
+    for(var i = 0; i < blobBin.length; i++) {
+      array.push(blobBin.charCodeAt(i));
+    }
+    var file=new Blob([new Uint8Array(array)], {type: 'image/png'});
+    console.log(file);
+
     var data = new FormData();
-    data.append('photo', imageSrc);
+    data.append('photo', file);
+    data.append('meal', this.state.meal);
 
     fetch('https://veggiefy.herokuapp.com/upload', {
       method: 'POST',
@@ -149,19 +186,35 @@ class Recorder extends Component {
     }).then(response => {
       console.log(response);
       if (response.status === 200) {
+        this.refs.deletePhoto.classList.add("disabled");
         this.refs.sendPhoto.classList.add("green");
       } else {
         this.refs.sendPhoto.classList.add("red");
       }
     }).catch(error => {
       console.error('Error:', error);
-      this.displayErrorMessage("Image could not be sent to server");
+      this.refs.sendPhoto.classList.add("red");
     })
   }
 
   render() {
+
     return (
       <div className="app container">
+          <div className="uk-inline" style={{width: "100%"}}>
+        <button className="uk-button uk-button-default" type="button" style={{width: "100%", marginBottom: "10px"}}>{this.state.meal}</button>
+        {this.state.mealSelectionActive && <div uk-dropdown="pos: bottom-justify">
+            <ul className="uk-nav uk-dropdown-nav">
+            {this.availableMeals.map((meal, key) => {
+              if (this.state.meal === meal) {
+                return <li key= {key} className="uk-active"><a href="#" onClick={() => this.handleMealChange(meal)}>{meal}</a></li>
+              } else {
+                return <li key={key}><a href="#" onClick={() => this.handleMealChange(meal)}>{meal}</a></li>
+              }
+            })}
+            </ul>
+        </div>}
+    </div>
 
       <a href="#" id="start-camera" className="visible" onClick={this.startCamera} ref="startButton">Touch here to start the camera.</a>
       <div style={{"position": "relative"}}>
@@ -176,11 +229,11 @@ class Recorder extends Component {
       </div>
       <canvas ref="canvas"></canvas>
       </div>
-            <div style={{"position": "relative"}}>
+      <div style={{"position": "relative"}}>
       <div ref="errorMessage" id="error-message">
-        {this.state.errorMessage}
+      {this.state.errorMessage}
       </div>
-</div>
+      </div>
       </div>
     );
   }

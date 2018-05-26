@@ -12,7 +12,7 @@ h3{
   max-width: 1000px;
   margin: 50px auto;
   padding: 20px;
-  background-color: #efefef;
+  background-color: #f8f8f8;
 }
 
 .app{
@@ -38,14 +38,14 @@ h3{
   color: #0C6E0F !important;
   background-color: #40A440 !important;
   opacity: 0.75 !important;
-  transition: 1s;
+  transition: 0.5s;
 }
 
 .red {
   color: #3B0000 !important;
   background-color: #AC2C2C !important;
   opacity: 0.75 !important;
-  transition: 1s;
+  transition: 0.5s;
 }
 
 #error-message{
