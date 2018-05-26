@@ -5,6 +5,7 @@ from flask import (
     Flask,
     jsonify,
     request,
+    make_response
 )
 from flask_heroku import Heroku
 from flask_cors import CORS, cross_origin
@@ -59,9 +60,9 @@ def upload_picture():
             print("meal created", meal)
             # db.session.add(meal)
             # db.session.commit()
-        labels = MealMatcher.query_labels(hash_value)
-        return jsonify(status=201)
-    return jsonify(status=204)
+        MealMatcher.query_labels(hash_value)
+        return jsonify(hash_id=hash_value), 201
+    return jsonify(), 204
 
 
 @app.route('/api/v1/meal/add', methods=['POST'])
