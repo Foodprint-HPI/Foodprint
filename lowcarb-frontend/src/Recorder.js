@@ -180,12 +180,12 @@ class Recorder extends Component {
     data.append('photo', file);
     data.append('meal', this.state.meal);
 
-    fetch('https://veggiefy.herokuapp.com/upload', {
+    fetch('https://veggiefy.herokuapp.com/api/v1/upload/', {
       method: 'POST',
       body: data
     }).then(response => {
       console.log(response);
-      if (response.status === 200) {
+      if (response.status === 201) {
         this.refs.deletePhoto.classList.add("disabled");
         this.refs.sendPhoto.classList.add("green");
       } else {
@@ -200,6 +200,7 @@ class Recorder extends Component {
   render() {
 
     return (
+      <div style={{"height": "calc(100vh - 80px)", "display": "flex", "alignItems": "center", "width": "100%"}}>
       <div className="app container">
           <div className="uk-inline" style={{width: "100%"}}>
         <button className="uk-button uk-button-default" type="button" style={{width: "100%", marginBottom: "10px"}}>{this.state.meal}</button>
@@ -232,6 +233,7 @@ class Recorder extends Component {
       <div style={{"position": "relative"}}>
       <div ref="errorMessage" id="error-message">
       {this.state.errorMessage}
+      </div>
       </div>
       </div>
       </div>
