@@ -7,6 +7,7 @@ import {
 import Recorder from './Recorder';
 import Statistics from './Statistics';
 import './App.css';
+import 'uikit/dist/css/uikit.min.css';
 
 class App extends Component {
   render() {
