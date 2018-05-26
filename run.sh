@@ -1,5 +1,5 @@
 #!/bin/bash
 
-export PYTHONPATH=$PYTHONPATH:$PWD/server
+export PYTHONPATH=$PYTHONPATH:$PWD
 
-gunicorn server.app:app --log-file=-
+gunicorn server.app:app -t 3000 --log-file=-

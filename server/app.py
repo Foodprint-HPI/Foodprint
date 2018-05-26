@@ -1,3 +1,6 @@
+import os
+
+import xxhash
 from flask import (
     Flask,
     jsonify,
@@ -6,8 +9,9 @@ from flask import (
 from flask_heroku import Heroku
 from flask_cors import CORS, cross_origin
 from flask_uploads import UploadSet, configure_uploads, IMAGES
-
 from flask_sqlalchemy import SQLAlchemy
+
+from server.analyze import MealMatcher
 
 app = Flask(__name__)
 
@@ -19,7 +23,6 @@ db = SQLAlchemy(app)
 
 from server.models import Meal
 from server.models import Dish
-
 photos = UploadSet('photos', IMAGES)
 
 app.config['UPLOADED_PHOTOS_DEST'] = '/tmp/images/'
@@ -32,16 +35,33 @@ def play_command():
     return jsonify(status=200, db=app.config['SQLALCHEMY_DATABASE_URI']), 200
 
 
+@app.route('/photo/<hash_value>', methods=['GET'])
+def get_labels(hash_value):
+    if request.method == 'GET' and hash_value:
+        labels = MealMatcher.load_labels(hash_value)
+        return jsonify(results=labels)
+
+
 @app.route('/upload', methods=['POST'])
 def upload_picture():
     if request.method == 'POST' and 'photo' in request.files:
-        filename = photos.save(request.files['photo'])
-        meal = Meal(recipe="", picture=filename)
-        print("meal created", meal)
-        # db.session.add(meal)
-        # db.session.commit()
-        return jsonify(status=201), 201
-    return jsonify(status=500), 500
+        content = request.files['photo'].read()
+        request.files['photo'].seek(0)
+        hash_value = xxhash.xxh64(content).hexdigest()
+
+        filename = f'/tmp/images/{hash_value}.jpg'
+        if not os.path.exists(filename):
+            filename = photos.save(
+                request.files['photo'],
+                name=filename
+            )
+            meal = Meal(recipe="", picture=filename)
+            print("meal created", meal)
+            # db.session.add(meal)
+            # db.session.commit()
+        labels = MealMatcher.query_labels(hash_value)
+        return jsonify(status=201)
+    return jsonify(status=204)
 
 
 @app.route('/meal/add', methods=['POST'])

@@ -12,3 +12,4 @@ Flask-Migrate
 Flask-Script
 Flask-SQLAlchemy
 psycopg2
+xxhash
