@@ -1,0 +1,2 @@
+python: bash ./run.sh
+node: cd lowcarb-frontend && npm install && npm start
