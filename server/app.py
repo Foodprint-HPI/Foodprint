@@ -12,6 +12,10 @@ from flask_uploads import UploadSet, configure_uploads, IMAGES
 from flask_sqlalchemy import SQLAlchemy
 
 from server.analyze import MealMatcher
+from server.whitelist import (
+    CO2_MAP_IN_KG,
+    RECOGNIZED_DISHES,
+)
 
 app = Flask(__name__)
 
@@ -66,8 +70,8 @@ def upload_picture():
         db.session.commit()
         labels = MealMatcher.query_labels(hash_value)
         validate_labels(meal, labels)
-        return jsonify(status=201)
-    return jsonify(status=204)
+        return jsonify(hash_id=hash_value), 201
+    return jsonify({}), 204
 
 
 @app.route('/api/v1/meal/add', methods=['POST'])
@@ -85,7 +89,7 @@ def meal_add():
 @app.route('/api/v1/meal', methods=['GET'])
 def get_all_meals():
     if request.method == 'GET':
-      return jsonify([meal.serialize for meal in Meal.query.all()]), 200
+        return jsonify([meal.serialize for meal in Meal.query.all()]), 200
     return jsonify(status=500), 500
 
 
@@ -94,14 +98,17 @@ def get_meal(meal_id):
     if request.method == 'GET' and int(meal_id) > 0:
         result = Meal.query.filter_by(id=meal_id).first()
         if result:
-          return jsonify(Meal.query.filter_by(id=meal_id).first().serialize), 200
+            return jsonify(Meal.query.filter_by(id=meal_id).first().serialize), 200
         else:
-          return jsonify({}), 404
+            return jsonify({}), 404
     return jsonify(status=500), 500
 
 
-if __name__ == '__main__':
-    app.run(debug=True)
+@app.route('/api/v1/reset', methods=['GET', 'POST'])
+def reset():
+    db.engine.execute("DELETE FROM meal;"),
+    db.engine.execute("DELETE FROM dish;"),
+    return jsonify({'success': True})
 
 
 def validate_labels(meal, labels):
@@ -125,7 +132,7 @@ def match_dish(meal: Meal, name: str):
         matched_dish = Dish.query.filter(name=name).first()
     else:
         if name.lower() not in RECOGNIZED_DISHES:
-          return
+            return
         dish = RECOGNIZED_DISHES[name.lower()]
         matched_dish = Dish(name=name, co2=calculate_footprint(dish))
         db.session.add(matched_dish)
@@ -138,33 +145,5 @@ def match_dish(meal: Meal, name: str):
     return meal
 
 
-CO2_MAP_IN_KG = {
-    'beef': 27.0,
-    'noodles': 2.9,
-    'onion': 2.9,
-    'tomato': 1.2,
-    'potatoe': 1.1,
-    'egg': 4.8,
-    'milk': 1.9,
-    'flour': 0.6,
-    'sugar': 3.8
-}
-
-RECOGNIZED_DISHES = {
-    'spaghetti': {
-        'beef': 0.15,
-        'noodles': 0.15,
-        'tomato': 0.05,
-        'onion': 0.02,
-    },
-    'schnitzel': {
-        'beef': 0.3,
-        'potatoe': 0.25
-    },
-    'pancake': {
-        'sugar': 0.05,
-        'egg': 0.2,
-        'flour': 0.2,
-        'milk': 0.6
-    }
-}
+if __name__ == '__main__':
+    app.run(debug=True)
