@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom';
 import Recorder from './Recorder';
 import Statistics from './Statistics';
+import LunchAndWeek from './LunchAndWeek';
 import './App.css';
 import 'uikit/dist/css/uikit.min.css';
 
@@ -16,9 +17,7 @@ class App extends Component {
       <Router>
         <div>
           <nav class="uk-navbar-container uk-navbar">
-
             <div class="uk-navbar-left">
-
               <ul class="uk-navbar-nav">
                 <li class="">
                   <NavLink exact={true} activeClassName='uk-active' to='/'>Recorder</NavLink>
@@ -30,9 +29,9 @@ class App extends Component {
             </div>
 
           </nav>
-
-          <Route exact path="/" component={Recorder} />
-          <Route path="/statistics" component={Statistics} />
+          <Route exact path="/" component={Recorder}/>
+          <Route exact path="/statistics" component={Statistics}/>
+          <Route path="/statistics/lunchandweek" component={LunchAndWeek}/>
         </div>
       </Router>
     );

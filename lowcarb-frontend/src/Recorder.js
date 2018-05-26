@@ -201,6 +201,7 @@ class Recorder extends Component {
         this.refs.sendPhoto.classList.add("green");
         response.json().then(data => this.fetchCO2(data));
       } else {
+        console.log(response)
         this.refs.sendPhoto.classList.add("red");
       }
     }).catch(error => {
@@ -230,11 +231,9 @@ class Recorder extends Component {
     </div>
 
       <a href="#" id="start-camera" className="visible" onClick={this.startCamera} ref="startButton">Touch here to start the camera.</a>
-      <div style={{"position": "relative"}}>
+      <div style={{"position": "relative", "overflow": "hidden", "width": "80vw", "height": "80vw", "margin":"auto"}}>
       <video id="camera-stream" ref="cameraStream"></video>
       <img ref="image" id="snap" />
-      </div>
-      <div style={{"position": "relative"}}>
       <div className="controls" ref="controls">
       <a href="#" id="delete-photo" title="Delete Photo" className="disabled" onClick={this.deletePhoto} ref="deletePhoto"><i className="far fa-trash-alt"></i></a>
       <a href="#" id="take-photo" title="Take Photo" onClick={this.takePhoto} ref="takePhoto"><i className="fas fa-camera"></i></a>
@@ -243,7 +242,7 @@ class Recorder extends Component {
       <canvas ref="canvas"></canvas>
       </div>
       <div style={{"position": "relative"}}>
-      <a href="/statistics" style={{"text-decoration": "none"}}><div ref="errorMessage" id="error-message">
+      <a href="/statistics" style={{"textDecoration": "none"}}><div ref="errorMessage" id="error-message">
       {this.state.errorMessage}
       </div></a>
       </div>
