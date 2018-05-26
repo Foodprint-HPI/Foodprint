@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import {
   BrowserRouter as Router,
   Route,
-  Link
+  Link,
+  NavLink
 } from 'react-router-dom';
 import Recorder from './Recorder';
 import Statistics from './Statistics';
@@ -14,21 +15,24 @@ class App extends Component {
     return (
       <Router>
         <div>
-          <nav class="uk-navbar-container" uk-navbar>
+          <nav class="uk-navbar-container uk-navbar">
+
             <div class="uk-navbar-left">
-                <ul class="uk-navbar-nav">
-                    <li class="uk-active">
-                      <Link to="/">Recorder</Link>
-                    </li>
-                    <li>
-                      <Link to="/statistics">Statistics</Link>
-                    </li>
-                </ul>
+
+              <ul class="uk-navbar-nav">
+                <li class="">
+                  <NavLink exact={true} activeClassName='uk-active' to='/'>Recorder</NavLink>
+                </li>
+                <li>
+                  <NavLink exact={true} activeClassName='uk-active' to='/statistics'>Statistics</NavLink>
+                </li>
+              </ul>
             </div>
+
           </nav>
 
-          <Route exact path="/" component={Recorder}/>
-          <Route path="/statistics" component={Statistics}/>
+          <Route exact path="/" component={Recorder} />
+          <Route path="/statistics" component={Statistics} />
         </div>
       </Router>
     );
