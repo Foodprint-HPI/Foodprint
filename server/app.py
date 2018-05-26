@@ -59,7 +59,8 @@ def meal_add():
 @app.route('/meal', methods=['GET'])
 def get_all_meals():
     if request.method == 'GET':
-        return jsonify(Meal.query().all()), 200
+        result = Meal.query().all()
+        return jsonify(result), 200
     return jsonify(status=500), 500
 
 
