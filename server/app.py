@@ -5,6 +5,10 @@ from flask import (
     Flask,
     jsonify,
     request,
+<<<<<<< HEAD
+=======
+    make_response
+>>>>>>> c15426b5acc5b491f814c9cbb2630701ad87fc03
 )
 from flask_heroku import Heroku
 from flask_cors import CORS, cross_origin
@@ -29,20 +33,20 @@ app.config['UPLOADED_PHOTOS_DEST'] = '/tmp/images/'
 configure_uploads(app, photos)
 
 
-@app.route('/', methods=['GET'])
+@app.route('/api/v1/', methods=['GET'])
 @cross_origin()
 def play_command():
     return jsonify(status=200, db=app.config['SQLALCHEMY_DATABASE_URI']), 200
 
 
-@app.route('/photo/<hash_value>', methods=['GET'])
+@app.route('/api/v1/photo/<hash_value>', methods=['GET'])
 def get_labels(hash_value):
     if request.method == 'GET' and hash_value:
         labels = MealMatcher.load_labels(hash_value)
         return jsonify(results=labels)
 
 
-@app.route('/upload', methods=['POST'])
+@app.route('/api/v1/upload', methods=['POST'])
 def upload_picture():
     if request.method == 'POST' and 'photo' in request.files:
         content = request.files['photo'].read()
@@ -50,27 +54,21 @@ def upload_picture():
         hash_value = xxhash.xxh64(content).hexdigest()
 
         filename = f'/tmp/images/{hash_value}.jpg'
-
-        if os.path.exists(filename):
-            existing_meal = Meal.query.filter(picture=hash_value).first()
-            Meal(recipe="", picture=hash_value, dish_id=existing_meal.id)
-            return
-
-        photos.save(
-            request.files['photo'],
-            name=filename
-        )
-        meal = Meal(recipe="", picture=hash_value)
-        print("meal created", meal)
-        db.session.add(meal)
-        db.session.commit()
-        labels = MealMatcher.query_labels(hash_value)
-        validate_labels(meal, labels)
-        return jsonify(status=201)
-    return jsonify(status=204)
+        if not os.path.exists(filename):
+            filename = photos.save(
+                request.files['photo'],
+                name=filename
+            )
+            meal = Meal(recipe="", picture=filename)
+            print("meal created", meal)
+            # db.session.add(meal)
+            # db.session.commit()
+        MealMatcher.query_labels(hash_value)
+        return jsonify(hash_id=hash_value), 201
+    return jsonify(), 204
 
 
-@app.route('/meal/add', methods=['POST'])
+@app.route('/api/v1/meal/add', methods=['POST'])
 def meal_add():
     if request.method == 'POST' and 'recipe' in request.form:
         recipe = request.form['recipe']
@@ -82,14 +80,14 @@ def meal_add():
     return jsonify(status=500), 500
 
 
-@app.route('/meal', methods=['GET'])
+@app.route('/api/v1/meal', methods=['GET'])
 def get_all_meals():
     if request.method == 'GET':
         return jsonify(meals=Meal.query.all()), 200
     return jsonify(status=500), 500
 
 
-@app.route('/meal/<meal_id>', methods=['GET'])
+@app.route('/api/v1/meal/<meal_id>', methods=['GET'])
 def get_meal(meal_id):
     if request.method == 'GET' and int(meal_id) > 0:
         return jsonify(meal=Meal.query.filter_by(id=meal_id).first()), 200

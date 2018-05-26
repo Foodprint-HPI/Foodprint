@@ -47,7 +47,6 @@ class MealMatcher:
             with open(f'/tmp/images/{hash_value}.jpg', 'rb') as f:
                 content = f.read()
             print("Querying Google...")
-            import pdb; pdb.set_trace()  # noqa: E702
             image = types.Image(content=content)
             response = client.label_detection(image=image)
             labels = response.label_annotations
