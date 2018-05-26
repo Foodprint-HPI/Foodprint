@@ -6,7 +6,7 @@ class Dish(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(512))
-    co2 = db.Column(db.Integer)
+    co2 = db.Column(db.Float)
     meals = db.relationship('Meal', lazy=False)
 
     def __repr__(self):

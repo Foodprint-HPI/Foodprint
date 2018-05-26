@@ -5,10 +5,6 @@ from flask import (
     Flask,
     jsonify,
     request,
-<<<<<<< HEAD
-=======
-    make_response
->>>>>>> c15426b5acc5b491f814c9cbb2630701ad87fc03
 )
 from flask_heroku import Heroku
 from flask_cors import CORS, cross_origin
@@ -54,18 +50,24 @@ def upload_picture():
         hash_value = xxhash.xxh64(content).hexdigest()
 
         filename = f'/tmp/images/{hash_value}.jpg'
-        if not os.path.exists(filename):
-            filename = photos.save(
-                request.files['photo'],
-                name=filename
-            )
-            meal = Meal(recipe="", picture=filename)
-            print("meal created", meal)
-            # db.session.add(meal)
-            # db.session.commit()
-        MealMatcher.query_labels(hash_value)
-        return jsonify(hash_id=hash_value), 201
-    return jsonify(), 204
+
+        if os.path.exists(filename):
+            existing_meal = Meal.query.filter_by(picture=hash_value).first()
+            Meal(recipe="", picture=hash_value, dish_id=existing_meal.id)
+            return jsonify(status=201)
+
+        photos.save(
+            request.files['photo'],
+            name=filename
+        )
+        meal = Meal(recipe="", picture=hash_value)
+        print("meal created", meal)
+        db.session.add(meal)
+        db.session.commit()
+        labels = MealMatcher.query_labels(hash_value)
+        validate_labels(meal, labels)
+        return jsonify(status=201)
+    return jsonify(status=204)
 
 
 @app.route('/api/v1/meal/add', methods=['POST'])
@@ -100,13 +102,13 @@ if __name__ == '__main__':
 
 def validate_labels(meal, labels):
     for label in labels:
-        updated_meal = match_dish(meal, label)
+        updated_meal = match_dish(meal, label['description'])
         if updated_meal:
             return
 
 
 def calculate_footprint(dish: dict):
-    carbon_sum = 0
+    carbon_sum = 0.0
     for ingredient, count in dish.items():
         carbon_sum += CO2_MAP_IN_KG[ingredient] * count
     return carbon_sum
@@ -115,16 +117,19 @@ def calculate_footprint(dish: dict):
 def match_dish(meal: Meal, name: str):
     if not name:
         raise ValueError('A dish name is required')
-    if Dish.query.filter(name=name).count():
+    if Dish.query.filter_by(name=name).count():
         matched_dish = Dish.query.filter(name=name).first()
     else:
-        dish = RECOGNIZED_DISHES[name]
+        if name.lower() not in RECOGNIZED_DISHES:
+          return
+        dish = RECOGNIZED_DISHES[name.lower()]
         matched_dish = Dish(name=name, co2=calculate_footprint(dish))
+        db.session.add(matched_dish)
         db.session.commit()
     if not matched_dish:
         print(f'Unable to match {name}')
         return
-    meal.recipe = matched_dish.id
+    meal.dish_id = matched_dish.id
     db.session.commit()
     return meal
 
@@ -142,17 +147,17 @@ CO2_MAP_IN_KG = {
 }
 
 RECOGNIZED_DISHES = {
-    'Spaghetti Bolognese': {
+    'spaghetti': {
         'beef': 0.15,
         'noodles': 0.15,
         'tomato': 0.05,
         'onion': 0.02,
     },
-    'Schnitzel': {
+    'schnitzel': {
         'beef': 0.3,
         'potatoe': 0.25
     },
-    'Pancakes': {
+    'pancake': {
         'sugar': 0.05,
         'egg': 0.2,
         'flour': 0.2,

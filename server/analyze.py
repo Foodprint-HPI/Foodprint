@@ -21,11 +21,6 @@ class MealMatcher:
 
     @staticmethod
     def save_labels(hash_value, labels):
-        labels = [{
-            'description': label.description,
-            'score': label.score,
-            } for label in labels
-        ]
         with open(f'/tmp/{hash_value}.pkl', 'wb') as f:
             pickle.dump([l for l in labels], f, pickle.HIGHEST_PROTOCOL)
 
@@ -50,6 +45,12 @@ class MealMatcher:
             image = types.Image(content=content)
             response = client.label_detection(image=image)
             labels = response.label_annotations
+
+            labels = [{
+              'description': label.description,
+              'score': label.score,
+            } for label in labels
+            ]
             MealMatcher.save_labels(hash_value, labels)
 
         return labels
