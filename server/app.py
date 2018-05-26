@@ -29,7 +29,7 @@ configure_uploads(app, photos)
 @app.route('/', methods=['GET'])
 @cross_origin()
 def play_command():
-    return jsonify(status=200, db=app.config['SQLALCHEMY_DATABASE_URI'])
+    return jsonify(status=200, db=app.config['SQLALCHEMY_DATABASE_URI']), 200
 
 
 @app.route('/upload', methods=['POST'])
@@ -40,8 +40,8 @@ def upload_picture():
         print("meal created", meal)
         # db.session.add(meal)
         # db.session.commit()
-        return jsonify(status=201)
-    return jsonify(status=500)
+        return jsonify(status=201), 201
+    return jsonify(status=500), 500
 
 
 @app.route('/meal/add', methods=['POST'])
@@ -52,22 +52,22 @@ def meal_add():
         print("meal created", meal)
         db.session.add(meal)
         db.session.commit()
-        return jsonify(status=201)
-    return jsonify(status=500)
+        return jsonify(status=201), 201
+    return jsonify(status=500), 500
 
 
 @app.route('/meal', methods=['GET'])
 def get_all_meals():
     if request.method == 'GET':
-        return jsonify(Meal.query().all())
-    return jsonify(status=500)
+        return jsonify(Meal.query().all()), 200
+    return jsonify(status=500), 500
 
 
 @app.route('/meal/<meal_id>', methods=['GET'])
 def get_meal(meal_id):
     if request.method == 'GET' and meal_id > 0:
-        return jsonify(Meal.query().filter(id=meal_id))
-    return jsonify(status=500)
+        return jsonify(Meal.query().filter(id=meal_id)), 200
+    return jsonify(status=500), 500
 
 
 if __name__ == '__main__':
@@ -85,6 +85,3 @@ def match_dish(meal: Meal, name: str):
         return
     meal.recipe = matched_dish.id
     db.session.commit()
-
-
-
