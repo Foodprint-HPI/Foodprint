@@ -6,6 +6,7 @@ class Recorder extends Component {
 
   constructor(props) {
     super(props);
+    this.baseUrl = "https://veggiefy.herokuapp.com/api/v1/";
     this.startCamera = this.startCamera.bind(this);
     this.takePhoto = this.takePhoto.bind(this);
     this.displayErrorMessage = this.displayErrorMessage.bind(this);
@@ -13,6 +14,7 @@ class Recorder extends Component {
     this.takeSnapshot = this.takeSnapshot.bind(this);
     this.sendPhoto = this.sendPhoto.bind(this);
     this.handleMealChange = this.handleMealChange.bind(this);
+    this.fetchCO2 = this.fetchCO2.bind(this);
     this.availableMeals = ["Breakfast", "Lunch", "Coffee", "Dinner", "Other"];
     this.state = {
       errorMessage: "",
@@ -27,6 +29,16 @@ class Recorder extends Component {
     });
   }
 
+  fetchCO2(data) {
+    fetch(this.baseUrl + 'photo/' + data.hash_id, {
+      method: "GET",
+    }).then(response => {
+      response.json().then(photo => {
+        this.displayErrorMessage(photo.results[0].description);
+      });
+    });
+  }
+
   componentDidMount() {
     // The getUserMedia interface is used for handling camera input.
     // Some browsers need a prefix so here we're covering all the options
@@ -37,7 +49,7 @@ class Recorder extends Component {
 
 
       if (!navigator.getMedia) {
-        this.displayErrorMessage("Your browser doesn't have support for the navigator.getUserMedia interface.");
+        //this.displayErrorMessage("Your browser doesn't have support for the navigator.getUserMedia interface.");
       } else{
 
         // Request the camera.
@@ -54,7 +66,7 @@ class Recorder extends Component {
         }.bind(this),
         // Error Callback
         function(err){
-          this.displayErrorMessage("There was an error with accessing the camera stream: " + err.name, err);
+          //this.displayErrorMessage("There was an error with accessing the camera stream: " + err.name, err);
         }.bind(this)
       );
 
@@ -63,12 +75,13 @@ class Recorder extends Component {
 
   startCamera(event) {
     event.preventDefault();
-    this.refs.startButton.classList.remove("visible")
+    this.refs.startButton.classList.remove("visible");
     this.refs.cameraStream.play();
     this.showVideo();
   }
 
   displayErrorMessage(text) {
+    this.refs.errorMessage.classList.add("visible");
     this.setState({
       errorMessage: text
     });
@@ -174,20 +187,19 @@ class Recorder extends Component {
       array.push(blobBin.charCodeAt(i));
     }
     var file=new Blob([new Uint8Array(array)], {type: 'image/png'});
-    console.log(file);
 
     var data = new FormData();
     data.append('photo', file);
     data.append('meal', this.state.meal);
 
-    fetch('https://veggiefy.herokuapp.com/api/v1/upload/', {
+    fetch(this.baseUrl + 'upload', {
       method: 'POST',
       body: data
     }).then(response => {
-      console.log(response);
-      if (response.status === 201) {
+      if (response.status === 201 || response.status === 200) {
         this.refs.deletePhoto.classList.add("disabled");
         this.refs.sendPhoto.classList.add("green");
+        response.json().then(data => this.fetchCO2(data));
       } else {
         this.refs.sendPhoto.classList.add("red");
       }
@@ -231,9 +243,9 @@ class Recorder extends Component {
       <canvas ref="canvas"></canvas>
       </div>
       <div style={{"position": "relative"}}>
-      <div ref="errorMessage" id="error-message">
+      <a href="/statistics" style={{"text-decoration": "none"}}><div ref="errorMessage" id="error-message">
       {this.state.errorMessage}
-      </div>
+      </div></a>
       </div>
       </div>
       </div>
