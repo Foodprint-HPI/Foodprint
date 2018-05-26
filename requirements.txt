@@ -1,0 +1,15 @@
+Flask
+gunicorn
+honcho
+flask-cors
+google-cloud-vision
+flask-heroku
+Flask-Uploads
+requests
+bs4
+alembic
+Flask-Migrate
+Flask-Script
+Flask-SQLAlchemy
+psycopg2
+xxhash
