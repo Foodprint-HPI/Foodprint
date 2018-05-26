@@ -65,8 +65,8 @@ def get_all_meals():
 
 @app.route('/meal/<meal_id>', methods=['GET'])
 def get_meal(meal_id):
-    if request.method == 'GET' and meal_id > 0:
-        return jsonify(meal=Meal.query.filter(id=meal_id)), 200
+    if request.method == 'GET' and int(meal_id) > 0:
+        return jsonify(meal=Meal.query.filter_by(id=meal_id).first()), 200
     return jsonify(status=500), 500
 
 

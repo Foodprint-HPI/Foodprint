@@ -1,24 +1,27 @@
 from server.manage import db
 
 
-class Meal(db.Model):
-    __tablename__ = 'meal'
-
-    id = db.Column(db.Integer, primary_key=True)
-    timestamp = db.Column(db.DateTime, index=True, unique=False)
-    recipe = db.Column(db.String(512), index=True, unique=False)
-    picture = db.Column(db.String(512), index=True, unique=False)
-    dish = db.Column(db.Integer, db.ForeignKey('dish.id'), nullable=False)
-    db.relationship('Dish', lazy=False)
-    def __repr__(self):
-        return f'<Meal {self.id}>'
-
 class Dish(db.Model):
     __tablename__ = 'dish'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(512), index=True, unique=False)
-    co2 = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(512))
+    co2 = db.Column(db.Integer)
+    meals = db.relationship('Meal', lazy=False)
 
     def __repr__(self):
         return f'<Dish {self.name}>'
+
+
+class Meal(db.Model):
+    __tablename__ = 'meal'
+
+    id = db.Column(db.Integer, primary_key=True, unique=True)
+    created = db.Column(db.DateTime, default=db.func.current_timestamp())
+    recipe = db.Column(db.String(512))
+    picture = db.Column(db.String(512))
+    dish_id = db.Column(db.Integer, db.ForeignKey('dish.id'))
+
+    def __repr__(self):
+        return f'<Meal {self.id}>'
+
