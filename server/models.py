@@ -10,4 +10,4 @@ class Meal(db.Model):
     picture = db.Column(db.String(512), index=True, unique=False)
 
     def __repr__(self):
-        return f'<Meal %r> {self.id}'
+        return f'<Meal {self.id}>'
