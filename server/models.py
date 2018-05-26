@@ -1,4 +1,4 @@
-from manage import db
+from server.manage import db
 
 
 class Meal(db.Model):
