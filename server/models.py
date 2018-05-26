@@ -9,7 +9,7 @@ class Meal(db.Model):
     recipe = db.Column(db.String(512), index=True, unique=False)
     picture = db.Column(db.String(512), index=True, unique=False)
     dish = db.Column(db.Integer, db.ForeignKey('dish.id'), nullable=False)
-
+    db.relationship('Dish', lazy=False)
     def __repr__(self):
         return f'<Meal {self.id}>'
 
