@@ -2,3 +2,6 @@ Flask
 gunicorn
 honcho
 flask-cors
+google-api-python-client
+flask-heroku
+Flask-Uploads
