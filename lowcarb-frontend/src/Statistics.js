@@ -226,7 +226,7 @@ class Statistics extends Component {
         {this.indicatorTemplate()}
 
 
-        <div class="uk-section uk-flex uk-flex-wrap background-gradient">
+        <div class="uk-section uk-flex uk-flex-wrap background-gradient-reversed">
           <div class="uk-width-1-2 uk-flex uk-flex-middle uk-flex-center uk-flex-wrap padding-all">
             {this.trees}
           </div>
@@ -236,7 +236,7 @@ class Statistics extends Component {
 
         </div>
 
-        <div class="uk-section uk-flex uk-flex-wrap background-gradient-reversed">
+        <div class="uk-section uk-flex uk-flex-wrap background-gradient">
           <div class="uk-width-1-2 uk-flex uk-flex-middle uk-flex-center padding-all">
             <h1>340km Autofahren</h1>
           </div>
@@ -245,7 +245,7 @@ class Statistics extends Component {
           </div>
         </div>
 
-        <div class="uk-section uk-flex uk-flex-wrap background-gradient">
+        <div class="uk-section uk-flex uk-flex-wrap background-gradient-reversed">
           <div class="uk-width-1-2 uk-flex uk-flex-middle uk-flex-center uk-flex-wrap padding-all">
             {this.cows}
           </div>
