@@ -2,7 +2,7 @@ Flask
 gunicorn
 honcho
 flask-cors
-google-api-python-client
+google-cloud-vision
 flask-heroku
 Flask-Uploads
 requests
