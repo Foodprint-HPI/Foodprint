@@ -1,6 +1,13 @@
 from server.manage import db
 
 
+def dump_datetime(value):
+    """Deserialize datetime object into string form for JSON processing."""
+    if value is None:
+        return None
+    return [value.strftime("%Y-%m-%d"), value.strftime("%H:%M:%S")]
+
+
 class Dish(db.Model):
     __tablename__ = 'dish'
 
@@ -12,6 +19,14 @@ class Dish(db.Model):
     def __repr__(self):
         return f'<Dish {self.name}>'
 
+    @property
+    def serialize(self):
+       return {
+            'id': self.id,
+            'name': self.name,
+            'co2': self.co2
+       }
+
 
 class Meal(db.Model):
     __tablename__ = 'meal'
@@ -21,7 +36,20 @@ class Meal(db.Model):
     recipe = db.Column(db.String(512))
     picture = db.Column(db.String(512))
     dish_id = db.Column(db.Integer, db.ForeignKey('dish.id'))
+    dish = db.relationship('Dish', lazy=False)
 
     def __repr__(self):
         return f'<Meal {self.id}>'
+
+    @property
+    def serialize(self):
+       return {
+            'id': self.id,
+            'name': self.dish.name,
+            'co2': self.dish.co2,
+            'created': self.created,
+            'recipe': self.recipe,
+            'picture': self.picture,
+            'dish_id': self.dish_id
+       }
 

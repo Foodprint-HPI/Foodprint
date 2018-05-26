@@ -85,14 +85,18 @@ def meal_add():
 @app.route('/api/v1/meal', methods=['GET'])
 def get_all_meals():
     if request.method == 'GET':
-        return jsonify(meals=Meal.query.all()), 200
+      return jsonify([meal.serialize for meal in Meal.query.all()]), 200
     return jsonify(status=500), 500
 
 
 @app.route('/api/v1/meal/<meal_id>', methods=['GET'])
 def get_meal(meal_id):
     if request.method == 'GET' and int(meal_id) > 0:
-        return jsonify(meal=Meal.query.filter_by(id=meal_id).first()), 200
+        result = Meal.query.filter_by(id=meal_id).first()
+        if result:
+          return jsonify(Meal.query.filter_by(id=meal_id).first().serialize), 200
+        else:
+          return jsonify({}), 404
     return jsonify(status=500), 500
 
 
