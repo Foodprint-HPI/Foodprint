@@ -11,13 +11,13 @@ class Statistics extends Component {
     this.weeklyGoal = 500;
     this.current = 300;
 
-    this.number_trees = 6.8;
+    this.number_trees = Math.round(this.current / 22 * 10) / 10;
     this.trees = this.duplicateTemplate(this.number_trees, this.treeTemplate);
 
-    this.number_cars = 10.8;
-    this.cars = this.duplicateTemplate(this.number_cars, this.carTemplate);
+    this.number_cars = Math.round(this.current * 3.6 * 10) / 10;
+    this.cars = this.duplicateTemplate(this.number_cars / 100, this.carTemplate);
 
-    this.number_cows = 11.4;
+    this.number_cows = Math.round(this.current / (5.1 * 7) * 10) / 10;
     this.cows = this.duplicateTemplate(this.number_cows, this.cowTemplate);
 
   }
@@ -91,14 +91,16 @@ class Statistics extends Component {
         datasets: [{
           data: [10, 20, 30, 20],
           backgroundColor: [
-            "#FF6384",
-            "#36A2EB",
-            "#FFCE56"
+            "#D16A76",
+            "#89CBE4",
+            "#F1E57C",
+            "#96C8A9"
           ],
           hoverBackgroundColor: [
-            "#FF6384",
-            "#36A2EB",
-            "#FFCE56"
+            "#D16A76",
+            "#89CBE4",
+            "#F1E57C",
+            "#96C8A9"
           ]
         }],
 
@@ -225,23 +227,28 @@ class Statistics extends Component {
       <main id="statistics">
         {this.indicatorTemplate()}
 
+        <div class="uk-section uk-section-muted uk-padding-remove">
+          <div class="uk-container uk-margin-medium-top uk-margin-medium-bottom">
+            <h1 class="uk-text-center">This is equivalent to:</h1>
+          </div>
+        </div>
 
         <div class="uk-section uk-flex uk-flex-wrap background-gradient-reversed">
           <div class="uk-width-1-2 uk-flex uk-flex-middle uk-flex-center uk-flex-wrap padding-all">
-            {this.trees}
+            {this.cars}
           </div>
           <div class="uk-width-1-2 uk-flex uk-flex-middle uk-flex-center padding-all">
-            <h1>1,8 Baumleben</h1>
+            <h1>{this.number_cars}km in a car.</h1>
           </div>
 
         </div>
 
         <div class="uk-section uk-flex uk-flex-wrap background-gradient">
           <div class="uk-width-1-2 uk-flex uk-flex-middle uk-flex-center padding-all">
-            <h1>340km Autofahren</h1>
+            <h1>Yearly absorption by {this.number_trees} trees.</h1>
           </div>
           <div class="uk-width-1-2 uk-flex uk-flex-middle uk-flex-center uk-flex-wrap padding-all">
-            {this.cars}
+            {this.trees}
           </div>
         </div>
 
@@ -250,7 +257,7 @@ class Statistics extends Component {
             {this.cows}
           </div>
           <div class="uk-width-1-2 uk-flex uk-flex-middle uk-flex-center padding-all">
-            <h1>{this.number_cows} Kühen</h1>
+            <h1>Emissions of {this.number_cows} cows in a week.</h1>
           </div>
         </div>
 
