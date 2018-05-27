@@ -30,11 +30,11 @@ class Recorder extends Component {
   }
 
   fetchCO2(data) {
-    fetch(this.baseUrl + 'photo/' + data.hash_id, {
+    fetch(this.baseUrl + 'meal/' + data.hash_id, {
       method: "GET",
     }).then(response => {
-      response.json().then(photo => {
-        this.displayErrorMessage(photo.results[0].description);
+      response.json().then(data => {
+        this.displayErrorMessage(data.name + "(" + data.co2 + "kg CO2)");
       });
     });
   }
