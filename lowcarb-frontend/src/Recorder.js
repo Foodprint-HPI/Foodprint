@@ -17,7 +17,7 @@ class Recorder extends Component {
     this.fetchCO2 = this.fetchCO2.bind(this);
     this.availableMeals = ["Breakfast", "Lunch", "Coffee", "Dinner", "Other"];
     this.state = {
-      errorMessage: "",
+      errorMessage: <div />,
       meal: "Coffee",
       mealSelectionActive: true
     }
@@ -34,7 +34,7 @@ class Recorder extends Component {
       method: "GET",
     }).then(response => {
       response.json().then(data => {
-        this.displayErrorMessage(data.name + "(" + data.co2 + "kg CO2)");
+        this.displayErrorMessage(<span><span style={{textTransform: 'capitalize'}}>{data.name}</span> ({data.co2} kg CO<sub>2</sub>)</span>);
       });
     });
   }
@@ -85,6 +85,7 @@ class Recorder extends Component {
     this.setState({
       errorMessage: text
     });
+    console.log(this.state);
   }
 
   takePhoto(event) {
