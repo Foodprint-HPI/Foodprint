@@ -205,7 +205,7 @@ class Statistics extends Component {
             <h1>Week</h1>
           </div>
           <div class="uk-width-1-2 uk-flex uk-flex-middle uk-flex-center">
-            <h2 class="uk-text-right">{this.state.current} / {this.weeklyGoal} kg CO2</h2>
+            <h2 class="uk-text-right">{this.state.current} / {this.weeklyGoal} kg CO<sub>2</sub></h2>
           </div>
         </div>
       );
@@ -224,7 +224,7 @@ class Statistics extends Component {
             <h1>Week</h1>
           </div>
           <div class="uk-width-1-2 uk-flex uk-flex-middle uk-flex-center">
-            <h2 class="uk-text-right">{this.state.current} / {this.weeklyGoal} kg CO2</h2>
+            <h2 class="uk-text-right">{this.state.current} / {this.weeklyGoal} kg CO<sub>2</sub></h2>
           </div>
         </div>
       )
@@ -242,7 +242,7 @@ class Statistics extends Component {
             <h1>Week</h1>
           </div>
           <div class="uk-width-1-2 uk-flex uk-flex-middle uk-flex-center">
-            <h4 class="uk-text-right">{this.state.current} / {this.weeklyGoal} kg CO2</h4>
+            <h4 class="uk-text-right">{this.state.current} / {this.weeklyGoal} kg CO<sub>2</sub></h4>
           </div>
         </div>
       )
@@ -313,7 +313,7 @@ class Statistics extends Component {
 
         <div class="uk-section uk-section-muted">
           <div class="uk-container uk-margin-large-top uk-margin-large-bottom">
-            <h1 class="uk-text-center">Übersicht der Mahlzeiten</h1>
+            <h1 class="uk-text-center">Meal Overview</h1>
           </div>
         </div>
         <div class="uk-section uk-section">
