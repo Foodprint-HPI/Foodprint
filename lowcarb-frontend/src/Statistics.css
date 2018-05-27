@@ -68,11 +68,6 @@
   position: relative;
 }
 
-.fa-bars {
-  font-size: 25px;
-  margin-right: 10px;
-}
-
 .fas:after {
   top: 0;
   content: "";

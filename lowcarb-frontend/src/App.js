@@ -48,10 +48,10 @@ class App extends Component {
         <div>
         <div uk-sticky="sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky; bottom: #transparent-sticky-navbar">
         <nav class="uk-navbar-container uk-margin" uk-navbar="mode: hover">
-        <div class="uk-navbar-left">
+        <div class="uk-navbar-center">
           <h1 class="logo">FOODPRINT</h1>
         </div>
-        <div class="uk-navbar-right">
+        <div class="uk-navbar-left">
 
         <ul class="uk-navbar-nav">
             <li>
@@ -72,6 +72,14 @@ class App extends Component {
                       </li>
                     </ul>
                   </div>
+            </li>
+        </ul>
+        </div>
+        <div class="uk-navbar-right">
+
+        <ul class="uk-navbar-nav">
+            <li class="uk-flex uk-flex-middle">
+              <img class="profile" src="ressources/profile.jpg" />
             </li>
         </ul>
     </div>
