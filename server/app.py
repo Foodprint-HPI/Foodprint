@@ -127,9 +127,9 @@ def get_recipe(name):
 @app.route('/api/v1/reset', methods=['GET', 'POST'])
 def reset():
     db.engine.execute("DELETE FROM meal;")
-    db.engine.execute("DELETE FROM dish;")
+    # db.engine.execute("DELETE FROM dish;")
     db.engine.execute("ALTER SEQUENCE meal_id_seq RESTART WITH 1")
-    db.engine.execute("ALTER SEQUENCE dish_id_seq RESTART WITH 1")
+    # db.engine.execute("ALTER SEQUENCE dish_id_seq RESTART WITH 1")
     try:
         shutil.rmtree('/tmp/images')
     except FileNotFoundError:

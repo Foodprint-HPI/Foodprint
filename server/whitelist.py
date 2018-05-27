@@ -50,12 +50,12 @@ RECOGNIZED_DISHES = {
 }
 
 MEALS_THIS_WEEK = [
-    "INSERT INTO dish (name, co2) VALUES ('spaghetti', 4.63);",
-    "INSERT INTO dish (name, co2) VALUES ('schnitzel', 9.26);",
-    "INSERT INTO dish (name, co2) VALUES ('pancake', 2.41);",
-    "INSERT INTO dish (name, co2) VALUES ('cereals', 0.8);",
-    "INSERT INTO dish (name, co2) VALUES ('salad', 1.4);",
-    "INSERT INTO dish (name, co2) VALUES ('bread', 1.5);",
+    # "INSERT INTO dish (name, co2) VALUES ('spaghetti', 4.63);",
+    # "INSERT INTO dish (name, co2) VALUES ('schnitzel', 9.26);",
+    # "INSERT INTO dish (name, co2) VALUES ('pancake', 2.41);",
+    # "INSERT INTO dish (name, co2) VALUES ('cereals', 0.8);",
+    # "INSERT INTO dish (name, co2) VALUES ('salad', 1.4);",
+    # "INSERT INTO dish (name, co2) VALUES ('bread', 1.5);",
 
     "INSERT INTO meal (created, recipe, picture, label, dish_id) VALUES (to_timestamp('20-05-2018 07:36:38', 'dd-mm-yyyy hh24:mi:ss'), '', '', 'Breakfast', 4);",
     "INSERT INTO meal (created, recipe, picture, label, dish_id) VALUES (to_timestamp('21-05-2018 07:36:38', 'dd-mm-yyyy hh24:mi:ss'), '', '', 'Breakfast', 4);",
