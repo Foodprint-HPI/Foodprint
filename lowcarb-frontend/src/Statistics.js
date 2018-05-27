@@ -8,18 +8,32 @@ class Statistics extends Component {
   constructor() {
     super();
 
-    this.weeklyGoal = 500;
-    this.current = 300;
+    this.weeklyGoal = 50;
+    this.current = 43.3;
 
-    this.number_trees = Math.round(this.current / 22 * 10) / 10;
-    this.trees = this.duplicateTemplate(this.number_trees, this.treeTemplate);
+    this.number_trees = Math.round(this.current / 0.42 * 10) / 10;
+    this.trees = this.duplicateTemplate(this.number_trees / 10, this.treeTemplate);
 
-    this.number_cars = Math.round(this.current * 3.6 * 10) / 10;
-    this.cars = this.duplicateTemplate(this.number_cars / 100, this.carTemplate);
+    this.number_cars = Math.round(this.current * 2.25 * 10) / 10;
+    this.cars = this.duplicateTemplate(this.number_cars / 10, this.carTemplate);
 
-    this.number_cows = Math.round(this.current / (5.1 * 7) * 10) / 10;
+    this.number_cows = Math.round(this.current / 5.1 * 10) / 10;
     this.cows = this.duplicateTemplate(this.number_cows, this.cowTemplate);
 
+    this.baseUrl = "https://veggiefy.herokuapp.com/api/v1/";
+    // this.co = this.fetchCO2();
+    this.availableMeals = ["Breakfast", "Lunch", "Coffee", "Dinner", "Other"];
+
+  }
+
+  fetchCO2(data) {
+    fetch(this.baseUrl + 'photo/', {method: "GET"} )
+      .then(response => {
+        response.json()
+        .then(photo => {
+          this.displayErrorMessage(photo.results[0].description);
+        });
+      });
   }
 
   componentDidMount() {
@@ -228,31 +242,31 @@ class Statistics extends Component {
         </div>
 
         <div class="uk-section uk-section-default uk-flex uk-flex-wrap uk-flex-column padding-all-mobile uk-hidden@m">
-          <h1 class="uk-text-center uk-margin-medium-bottom">{this.number_cars}km in a car.</h1>
+          <h1 class="uk-text-center uk-margin-medium-bottom">{this.number_cars} miles driven in a car.</h1>
           <div class="uk-flex uk-flex-middle uk-flex-center uk-flex-wrap">
             {this.cars}
           </div>
         </div>
 
-        <div class="uk-section uk-flex uk-flex-wrap background-gradient-reversed uk-hidden uk-visible@m">
+        <div class="uk-section uk-flex uk-flex-wrap background-gradient-reversed uk-visible@m">
           <div class="uk-width-1-2 uk-flex uk-flex-middle uk-flex-center uk-flex-wrap padding-all">
             {this.cars}
           </div>
           <div class="uk-width-1-2 uk-flex uk-flex-middle uk-flex-center padding-all">
-            <h1>{this.number_cars}km in a car.</h1>
+            <h1>{this.number_cars} miles driven in a car.</h1>
           </div>
         </div>
 
         <div class="uk-section uk-section-muted uk-flex uk-flex-wrap uk-flex-column padding-all-mobile uk-hidden@m">
-          <h1 class="uk-text-center uk-margin-medium-bottom">Yearly absorption by {this.number_trees} trees.</h1>
+          <h1 class="uk-text-center uk-margin-medium-bottom">The weekly absorption by {this.number_trees} trees.</h1>
           <div class="uk-flex uk-flex-middle uk-flex-center uk-flex-wrap">
             {this.trees}
           </div>
         </div>
 
-        <div class="uk-section uk-flex uk-flex-wrap background-gradient uk-hidden uk-visible@m">
+        <div class="uk-section uk-flex uk-flex-wrap background-gradient uk-visible@m">
           <div class="uk-width-1-2 uk-flex uk-flex-middle uk-flex-center padding-all">
-            <h1>Yearly absorption by {this.number_trees} trees.</h1>
+            <h1>The weekly absorption <br /> by {this.number_trees} trees.</h1>
           </div>
           <div class="uk-width-1-2 uk-flex uk-flex-middle uk-flex-center uk-flex-wrap padding-all">
             {this.trees}
@@ -260,7 +274,7 @@ class Statistics extends Component {
         </div>
 
         <div class="uk-section uk-section-default uk-flex uk-flex-wrap uk-flex-column padding-all-mobile uk-hidden@m">
-          <h1 class="uk-text-center uk-margin-medium-bottom">Emissions of {this.number_cows} cows in a week.</h1>
+          <h1 class="uk-text-center uk-margin-medium-bottom">Emissions of {this.number_cows} cows in a day.</h1>
           <div class="uk-flex uk-flex-middle uk-flex-center uk-flex-wrap">
             {this.cows}
           </div>
@@ -271,7 +285,7 @@ class Statistics extends Component {
             {this.cows}
           </div>
           <div class="uk-width-1-2 uk-flex uk-flex-middle uk-flex-center padding-all">
-            <h1>Emissions of {this.number_cows} cows in a week.</h1>
+            <h1>Emissions of {this.number_cows} <br /> cows in a day.</h1>
           </div>
         </div>
 
