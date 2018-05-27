@@ -47,16 +47,16 @@ INSERT INTO meal (created, recipe, picture, label, dish_id)
 VALUES (to_timestamp('21-05-2018 15:36:38', 'dd-mm-yyyy hh24:mi:ss'), '', '', 'Coffee', 3);
 
 INSERT INTO meal (created, recipe, picture, label, dish_id)
-VALUES (to_timestamp('20-05-2018 18:36:38', 'dd-mm-yyyy hh24:mi:ss'), '', '', 'Coffee', 5);
+VALUES (to_timestamp('20-05-2018 18:36:38', 'dd-mm-yyyy hh24:mi:ss'), '', '', 'Dinner', 5);
 INSERT INTO meal (created, recipe, picture, label, dish_id)
-VALUES (to_timestamp('21-05-2018 18:36:38', 'dd-mm-yyyy hh24:mi:ss'), '', '', 'Coffee', 5);
+VALUES (to_timestamp('21-05-2018 18:36:38', 'dd-mm-yyyy hh24:mi:ss'), '', '', 'Dinner', 5);
 INSERT INTO meal (created, recipe, picture, label, dish_id)
-VALUES (to_timestamp('22-05-2018 18:36:38', 'dd-mm-yyyy hh24:mi:ss'), '', '', 'Coffee', 4);
+VALUES (to_timestamp('22-05-2018 18:36:38', 'dd-mm-yyyy hh24:mi:ss'), '', '', 'Dinner', 4);
 INSERT INTO meal (created, recipe, picture, label, dish_id)
-VALUES (to_timestamp('23-05-2018 18:36:38', 'dd-mm-yyyy hh24:mi:ss'), '', '', 'Coffee', 4);
+VALUES (to_timestamp('23-05-2018 18:36:38', 'dd-mm-yyyy hh24:mi:ss'), '', '', 'Dinner', 4);
 INSERT INTO meal (created, recipe, picture, label, dish_id)
-VALUES (to_timestamp('24-05-2018 18:36:38', 'dd-mm-yyyy hh24:mi:ss'), '', '', 'Coffee', 5);
+VALUES (to_timestamp('24-05-2018 18:36:38', 'dd-mm-yyyy hh24:mi:ss'), '', '', 'Dinner', 5);
 INSERT INTO meal (created, recipe, picture, label, dish_id)
-VALUES (to_timestamp('25-05-2018 18:36:38', 'dd-mm-yyyy hh24:mi:ss'), '', '', 'Coffee', 5);
+VALUES (to_timestamp('25-05-2018 18:36:38', 'dd-mm-yyyy hh24:mi:ss'), '', '', 'Dinner', 5);
 INSERT INTO meal (created, recipe, picture, label, dish_id)
-VALUES (to_timestamp('26-05-2018 18:36:38', 'dd-mm-yyyy hh24:mi:ss'), '', '', 'Coffee', 4);
+VALUES (to_timestamp('26-05-2018 18:36:38', 'dd-mm-yyyy hh24:mi:ss'), '', '', 'Dinner', 4);
