@@ -18,6 +18,8 @@ from server.whitelist import (
     CO2_MAP_IN_KG,
     RECOGNIZED_DISHES,
 )
+from server.recipes import Recipes
+
 
 app = Flask(__name__)
 
@@ -107,6 +109,14 @@ def get_meal(hash_value):
     return jsonify(status=500), 500
 
 
+@app.route('/api/v1/recipe/<name>', methods=['GET'])
+def get_recipe(name):
+    ingredients = Recipes.ingredients(name)
+    if ingredients:
+        return jsonify({'ingredients': ingredients})
+    else:
+        return jsonify({'ingredients': []}), 404
+
 # def purge(dir, pattern):
 #     for f in os.listdir(dir):
 #         if re.search(pattern, f):
@@ -132,7 +142,6 @@ def weekly_sum():
         AND extract('week' from created) = extract('week' from CURRENT_TIMESTAMP)
         {'GROUP BY meal.label' if group else '' }
     """
-    import pdb; pdb.set_trace()  # noqa: E702
     result = [row for row in db.engine.execute(QUERY)]
     return jsonify({'result': result[0][0]})
 
