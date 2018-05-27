@@ -7,7 +7,12 @@ import {
 } from 'react-router-dom';
 import Recorder from './Recorder';
 import Statistics from './Statistics';
-import LunchAndWeek from './LunchAndWeek';
+import WeekOverview from './WeekOverview';
+import WeekView from './WeekView';
+import DayView from './DayView';
+import MealOverview from './MealOverview';
+import MealDetail from './MealDetail';
+import RegularFoodForm from './RegularFoodForm';
 import './App.css';
 import 'uikit/dist/css/uikit.min.css';
 
@@ -25,13 +30,24 @@ class App extends Component {
                 <li>
                   <NavLink exact={true} activeClassName='uk-active' to='/statistics'>Statistics</NavLink>
                 </li>
+                <li>
+                  <NavLink exact={true} activeClassName='uk-active' to='/statistics/week'>History</NavLink>
+                </li>
+                <li>
+                  <NavLink exact={true} activeClassName='uk-active' to='/statistics/meal'>Meals</NavLink>
+                </li>
               </ul>
             </div>
 
           </nav>
           <Route exact path="/" component={Recorder}/>
+          <Route exact path="/regular" component={RegularFoodForm}/>
           <Route exact path="/statistics" component={Statistics}/>
-          <Route path="/statistics/lunchandweek" component={LunchAndWeek}/>
+          <Route exact path="/statistics/week" component={WeekOverview}/>
+          <Route exact path="/statistics/week/:weekId" component={WeekView}/>
+          <Route exact path="/statistics/week/:weekId/day/:dayId" component={DayView}/>
+          <Route exact path="/statistics/meal" component={MealOverview}/>
+          <Route exact path="/statistics/meal/:mealtime" component={MealDetail}/>
         </div>
       </Router>
     );

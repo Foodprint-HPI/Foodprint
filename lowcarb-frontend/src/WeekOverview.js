@@ -6,10 +6,11 @@ const data = {
   "limit": 50
 };
 
-class LunchAndWeek extends Component {
+class WeekOverview extends Component {
 
   graphClickEvent(event) {
-    console.log(event);
+    event.preventDefault();
+    window.location.href = "/statistics/week/2";
   }
 
   componentDidMount() {
@@ -31,17 +32,17 @@ class LunchAndWeek extends Component {
       type: 'bar',
       data: {
         datasets: [{
-          label: 'Weekly CO2 consumption',
-          data: [10, 20, 30, 40],
+          label: 'Weekly CO2 consumption (kg)',
+          data: [10, 13, 26, 14],
           backgroundColor: [
                         'rgba(45, 136, 45, 0.2)',
                         'rgba(45, 136, 45, 0.2)',
                         'rgba(128, 21, 21, 0.2)',
-                        'rgba(128, 21, 21, 0.2)',
+                        'rgba(45, 136, 45, 0.2)',
                     ],
         }, {
           label: 'Limit',
-          data: [20, 20, 20, 20],
+          data: [15, 15, 15, 15],
           pointBorderColor: 'rgba(128,21,21,0.2)',
           pointBackgroundColor: 'rgba(128,21,21,0.2)',
           borderColor: 'rgba(170, 57, 57,0.2)',
@@ -50,7 +51,7 @@ class LunchAndWeek extends Component {
           // Changes this dataset to become a line
           type: 'line'
         }],
-        labels: ['1', '2', '3', '4'],
+        labels: ['4/30', '5/7', '5/14', '5/21'],
       },
       options: options
     });
@@ -59,11 +60,11 @@ class LunchAndWeek extends Component {
   render() {
     return (
       <div>
-      <h3>Your Carbon Foodprint</h3>
-      <canvas id="ctx" ref="diagram" width="95%" height="95%"></canvas>
+      <h3>Your Carbon Foodprint<br />(4 weeks)</h3>
+      <canvas id="ctx" ref="diagram" width="95%" height="95%" style={{"margin": "auto", "maxWidth": "500px"}}></canvas>
       </div>
     );
   }
 }
 
-export default LunchAndWeek;
+export default WeekOverview;
