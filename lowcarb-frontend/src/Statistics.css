@@ -2,6 +2,10 @@
   .padding-all-mobile {
     padding: 25px;
   }
+  .progress-bar-padding {
+    padding-top: 20px !important;
+    padding-bottom: 0 !important;
+  }
 }
 
 .background-gradient {
