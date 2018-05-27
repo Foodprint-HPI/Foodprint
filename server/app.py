@@ -17,6 +17,7 @@ from server.analyze import MealMatcher
 from server.whitelist import (
     CO2_MAP_IN_KG,
     RECOGNIZED_DISHES,
+    MEALS_THIS_WEEK,
 )
 from server.recipes import Recipes
 
@@ -125,11 +126,26 @@ def get_recipe(name):
 
 @app.route('/api/v1/reset', methods=['GET', 'POST'])
 def reset():
-    db.engine.execute("DELETE FROM meal;"),
-    db.engine.execute("DELETE FROM dish;"),
-    shutil.rmtree('/tmp/images')
+    db.engine.execute("DELETE FROM meal;")
+    db.engine.execute("DELETE FROM dish;")
+    db.engine.execute("ALTER SEQUENCE meal_id_seq RESTART WITH 1")
+    db.engine.execute("ALTER SEQUENCE dish_id_seq RESTART WITH 1")
+    try:
+        shutil.rmtree('/tmp/images')
+    except FileNotFoundError:
+        pass
     # purge('/tmp/', r".*\.pkl")
     return jsonify({'success': True})
+
+
+@app.route('/api/v1/seed', methods=['GET', 'POST'])
+def seed():
+    try:
+        for row in MEALS_THIS_WEEK:
+            db.engine.execute(row)
+        return jsonify({'success': True})
+    except Exception as e:
+        return ({'e': e}), 400
 
 
 @app.route('/api/v1/week/now', methods=['POST'])
