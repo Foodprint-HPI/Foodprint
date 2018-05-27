@@ -39,6 +39,8 @@ class Meal(db.Model):
     dish_id = db.Column(db.Integer, db.ForeignKey('dish.id'))
     dish = db.relationship('Dish', lazy=False)
 
+    TYPES = ["Breakfast", "Lunch", "Coffee", "Dinner", "Other"]
+
     def __repr__(self):
         return f'<Meal {self.id}>'
 

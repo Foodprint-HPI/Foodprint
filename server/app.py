@@ -1,5 +1,6 @@
 import os
 import shutil
+import re
 
 import xxhash
 from flask import (
@@ -65,7 +66,10 @@ def upload_picture():
             request.files['photo'],
             name=filename
         )
-        meal = Meal(recipe="", picture=hash_value)
+        meal_type = request.form['meal']
+        if meal_type not in Meal.TYPES:
+            return jsonify({'failure': 'invalid_meal_type'}), 400
+        meal = Meal(recipe="", picture=hash_value, label=meal_type)
         db.session.add(meal)
         db.session.commit()
         labels = MealMatcher.query_labels(hash_value)
@@ -92,15 +96,21 @@ def get_all_meals():
     return jsonify(status=500), 500
 
 
-@app.route('/api/v1/meal/<meal_id>', methods=['GET'])
-def get_meal(meal_id):
-    if request.method == 'GET' and int(meal_id) > 0:
-        result = Meal.query.filter_by(id=meal_id).first()
+@app.route('/api/v1/meal/<hash_value>', methods=['GET'])
+def get_meal(hash_value):
+    if request.method == 'GET' and hash_value:
+        result = Meal.query.filter_by(picture=hash_value).first()
         if result:
-            return jsonify(Meal.query.filter_by(id=meal_id).first().serialize), 200
+            return jsonify(Meal.query.filter_by(picture=hash_value).first().serialize), 200
         else:
             return jsonify({}), 404
     return jsonify(status=500), 500
+
+
+# def purge(dir, pattern):
+#     for f in os.listdir(dir):
+#         if re.search(pattern, f):
+#             os.remove(os.path.join(dir, f))
 
 
 @app.route('/api/v1/reset', methods=['GET', 'POST'])
@@ -108,19 +118,21 @@ def reset():
     db.engine.execute("DELETE FROM meal;"),
     db.engine.execute("DELETE FROM dish;"),
     shutil.rmtree('/tmp/images')
+    # purge('/tmp/', r".*\.pkl")
     return jsonify({'success': True})
 
 
 @app.route('/api/v1/week/now', methods=['POST'])
 def weekly_sum():
-    # grouped = request.form['grouped']
-
-    QUERY = """
-        SELECT SUM(dish.co2)
+    group = request.form.get('group', False)
+    QUERY = f"""
+        SELECT {'meal.label, ' if group else '' } SUM(dish.co2)
         FROM dish, meal
         WHERE dish.id = meal.dish_id
         AND extract('week' from created) = extract('week' from CURRENT_TIMESTAMP)
+        {'GROUP BY meal.label' if group else '' }
     """
+    import pdb; pdb.set_trace()  # noqa: E702
     result = [row for row in db.engine.execute(QUERY)]
     return jsonify({'result': result[0][0]})
 
@@ -143,7 +155,7 @@ def match_dish(meal: Meal, name: str):
     if not name:
         raise ValueError('A dish name is required')
     if Dish.query.filter_by(name=name).count():
-        matched_dish = Dish.query.filter(name=name).first()
+        matched_dish = Dish.query.filter_by(name=name).first()
     else:
         if name.lower() not in RECOGNIZED_DISHES:
             return
