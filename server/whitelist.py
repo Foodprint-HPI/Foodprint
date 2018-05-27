@@ -7,7 +7,13 @@ CO2_MAP_IN_KG = {
     'egg': 4.8,
     'milk': 1.9,
     'flour': 0.6,
-    'sugar': 3.8
+    'sugar': 3.8,
+    'oatmeal': 0.5,
+    'apple': 0.4,
+    'iceberg': 0.2,
+    'walnut': 0.95,
+    'cheese': 13.5,
+    'bread': 0.5
 }
 
 RECOGNIZED_DISHES = {
@@ -26,5 +32,19 @@ RECOGNIZED_DISHES = {
         'egg': 0.2,
         'flour': 0.2,
         'milk': 0.6
+    },
+    'cereals': {
+        'milk': 0.3,
+        'oatmeal': 0.3,
+        'apple': 0.2
+    },
+    'salad': {
+        'iceberg': 0.3,
+        'walnut': 0.1,
+        'cheese': 0.1
+    },
+    'bread': {
+        'bread': 0.3,
+        'cheese': 0.1
     }
 }
