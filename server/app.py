@@ -118,11 +118,11 @@ def weekly_sum():
     QUERY = """
         SELECT SUM(dish.co2)
         FROM dish, meal
-        WHERE dish.id = meal.id
+        WHERE dish.id = meal.dish_id
         AND extract('week' from created) = extract('week' from CURRENT_TIMESTAMP)
     """
-    result = db.engine.execute(QUERY)
-    return jsonify({'result': result})
+    result = [row for row in db.engine.execute(QUERY)]
+    return jsonify({'result': result[0][0]})
 
 
 def validate_labels(meal, labels):
