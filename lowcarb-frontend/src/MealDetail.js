@@ -15,16 +15,16 @@ class MealDetail extends Component {
           label: 'kg CO2 consumption per Week',
           data: [2, 2.4, 1.4, 3, 0.2],
           backgroundColor: [
-                        'rgba(45, 136, 45, 0.2)',
-                        'rgba(231, 12, 69, 0.2)',
-                        'rgba(57, 21, 69, 0.2)',
-                        'rgba(128, 21, 21, 0.2)',
-                    ],
+            '#F1E57C',
+            '#F1E57C',
+            '#96C8A9',
+            '#D16A76',
+          ],
         }],
         labels: ['4/30', '5/7', '5/14', '5/21'],
-    },
-    options: options
-  });
+      },
+      options: options
+    });
   }
 
   render() {
@@ -32,8 +32,12 @@ class MealDetail extends Component {
     const weekNumber = params[params.length - 1];
     return (
       <div>
-      <h3>Your Carbon Foodprint<br/>Lunch</h3>
-      <canvas id="ctx" ref="diagram" width="95%" height="95%" style={{"margin": "auto", "maxWidth": "500px"}}></canvas>
+        <div class="uk-section uk-section-muted uk-padding-remove uk-margin-large-bottom">
+          <div class="uk-container uk-margin-medium-top uk-margin-medium-bottom">
+            <h1 class="uk-text-center">Your Carbon Foodprint<br />Lunch</h1>
+          </div>
+        </div>
+        <canvas id="ctx" ref="diagram" width="95%" height="95%" style={{ "margin": "auto", "maxWidth": "500px" }}></canvas>
       </div>
     );
   }

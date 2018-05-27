@@ -95,12 +95,6 @@ class Statistics extends Component {
             "#89CBE4",
             "#F1E57C",
             "#96C8A9"
-          ],
-          hoverBackgroundColor: [
-            "#D16A76",
-            "#89CBE4",
-            "#F1E57C",
-            "#96C8A9"
           ]
         }],
 
