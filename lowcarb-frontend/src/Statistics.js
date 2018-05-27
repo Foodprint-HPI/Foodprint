@@ -8,31 +8,53 @@ class Statistics extends Component {
   constructor() {
     super();
 
+    this.state = {
+      current: 0,
+      number_trees: 0,
+      trees: [],
+      number_cars: 0,
+      cars: [],
+      number_cows: 0,
+      cows: []
+
+    }
+
     this.weeklyGoal = 50;
-    this.current = 43.3;
-
-    this.number_trees = Math.round(this.current / 0.42 * 10) / 10;
-    this.trees = this.duplicateTemplate(this.number_trees / 10, this.treeTemplate);
-
-    this.number_cars = Math.round(this.current * 2.25 * 10) / 10;
-    this.cars = this.duplicateTemplate(this.number_cars / 10, this.carTemplate);
-
-    this.number_cows = Math.round(this.current / 5.1 * 10) / 10;
-    this.cows = this.duplicateTemplate(this.number_cows, this.cowTemplate);
 
     this.baseUrl = "https://veggiefy.herokuapp.com/api/v1/";
-    // this.co = this.fetchCO2();
-    this.availableMeals = ["Breakfast", "Lunch", "Coffee", "Dinner", "Other"];
+    this.fetchCO2();
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    if (this.state.current != nextState.current){
+      console.log('update');
+      const number_trees = Math.round(nextState.current / 0.42 * 10) / 10;
+      const trees = this.duplicateTemplate(number_trees / 10, this.treeTemplate);
+
+      const number_cars = Math.round(nextState.current * 2.25 * 10) / 10;
+      const cars = this.duplicateTemplate(number_cars / 10, this.carTemplate);
+
+      const number_cows = Math.round(nextState.current / 5.1 * 10) / 10;
+      const cows = this.duplicateTemplate(number_cows, this.cowTemplate);
+      this.setState({
+        number_trees: number_trees,
+        trees: trees,
+        number_cars: number_cars,
+        cars: cars,
+        number_cows: number_cows,
+        cows: cows
+      });
+    }
 
   }
 
   fetchCO2(data) {
-    fetch(this.baseUrl + 'photo/', {method: "GET"} )
+    fetch(this.baseUrl + 'week/now', { method: "POST" })
       .then(response => {
         response.json()
-        .then(photo => {
-          this.displayErrorMessage(photo.results[0].description);
-        });
+          .then(currentCarbon => {
+            this.setState({ current: Math.round(currentCarbon.result * 10) / 10 });
+          });
       });
   }
 
@@ -174,8 +196,8 @@ class Statistics extends Component {
   indicatorTemplate() {
     const currentDate = new Date();
     const currentGoal = this.weeklyGoal / 7 * (currentDate.getDay() || 7);
-    if (this.current > this.weeklyGoal) {
-      const indicatorPosition = 100 * this.weeklyGoal / (this.current * 1.66);
+    if (this.state.current > this.weeklyGoal) {
+      const indicatorPosition = 100 * this.weeklyGoal / (this.state.current * 1.66);
       return (
         <div class="uk-section uk-flex uk-flex-wrap background-gradient-30 indicator-container padding-all-mobile progress-bar-padding">
           <div class="indicator" style={{ left: indicatorPosition + '%' }} />
@@ -183,13 +205,13 @@ class Statistics extends Component {
             <h1>Week</h1>
           </div>
           <div class="uk-width-1-2 uk-flex uk-flex-middle uk-flex-center">
-            <h2 class="uk-text-right">{this.current} / {this.weeklyGoal} kg CO2</h2>
+            <h2 class="uk-text-right">{this.state.current} / {this.weeklyGoal} kg CO2</h2>
           </div>
         </div>
       );
-    } else if (this.current > currentGoal) {
+    } else if (this.state.current > currentGoal) {
       const indicatorPosition = 100 * currentGoal / this.weeklyGoal;
-      const currentProgress = 100 * this.current / this.weeklyGoal;
+      const currentProgress = 100 * this.state.current / this.weeklyGoal;
       return (
         <div class="uk-section uk-flex uk-flex-wrap indicator-container padding-all-mobile progress-bar-padding" style={{
           background: '#F1E57C',
@@ -202,13 +224,13 @@ class Statistics extends Component {
             <h1>Week</h1>
           </div>
           <div class="uk-width-1-2 uk-flex uk-flex-middle uk-flex-center">
-          <h2 class="uk-text-right">{this.current} / {this.weeklyGoal} kg CO2</h2>
+            <h2 class="uk-text-right">{this.state.current} / {this.weeklyGoal} kg CO2</h2>
           </div>
         </div>
       )
 
     } else {
-      const currentProgress = 100 * this.current / this.weeklyGoal;
+      const currentProgress = 100 * this.state.current / this.weeklyGoal;
       return (
         <div class="uk-section uk-flex uk-flex-wrap indicator-container padding-all-mobile progress-bar-padding" style={{
           background: '#96C8A9',
@@ -220,7 +242,7 @@ class Statistics extends Component {
             <h1>Week</h1>
           </div>
           <div class="uk-width-1-2 uk-flex uk-flex-middle uk-flex-center">
-          <h4 class="uk-text-right">{this.current} / {this.weeklyGoal} kg CO2</h4>
+            <h4 class="uk-text-right">{this.state.current} / {this.weeklyGoal} kg CO2</h4>
           </div>
         </div>
       )
@@ -242,50 +264,50 @@ class Statistics extends Component {
         </div>
 
         <div class="uk-section uk-section-default uk-flex uk-flex-wrap uk-flex-column padding-all-mobile uk-hidden@m">
-          <h1 class="uk-text-center uk-margin-medium-bottom">{this.number_cars} miles driven in a car.</h1>
+          <h1 class="uk-text-center uk-margin-medium-bottom">{this.state.number_cars} miles driven in a car.</h1>
           <div class="uk-flex uk-flex-middle uk-flex-center uk-flex-wrap">
-            {this.cars}
+            {this.state.cars}
           </div>
         </div>
 
         <div class="uk-section uk-flex uk-flex-wrap background-gradient-reversed uk-visible@m">
           <div class="uk-width-1-2 uk-flex uk-flex-middle uk-flex-center uk-flex-wrap padding-all">
-            {this.cars}
+            {this.state.cars}
           </div>
           <div class="uk-width-1-2 uk-flex uk-flex-middle uk-flex-center padding-all">
-            <h1>{this.number_cars} miles driven in a car.</h1>
+            <h1>{this.state.number_cars} miles driven in a car.</h1>
           </div>
         </div>
 
         <div class="uk-section uk-section-muted uk-flex uk-flex-wrap uk-flex-column padding-all-mobile uk-hidden@m">
-          <h1 class="uk-text-center uk-margin-medium-bottom">The weekly absorption by {this.number_trees} trees.</h1>
+          <h1 class="uk-text-center uk-margin-medium-bottom">The weekly absorption by {this.state.number_trees} trees.</h1>
           <div class="uk-flex uk-flex-middle uk-flex-center uk-flex-wrap">
-            {this.trees}
+            {this.state.trees}
           </div>
         </div>
 
         <div class="uk-section uk-flex uk-flex-wrap background-gradient uk-visible@m">
           <div class="uk-width-1-2 uk-flex uk-flex-middle uk-flex-center padding-all">
-            <h1>The weekly absorption <br /> by {this.number_trees} trees.</h1>
+            <h1>The weekly absorption <br /> by {this.state.number_trees} trees.</h1>
           </div>
           <div class="uk-width-1-2 uk-flex uk-flex-middle uk-flex-center uk-flex-wrap padding-all">
-            {this.trees}
+            {this.state.trees}
           </div>
         </div>
 
         <div class="uk-section uk-section-default uk-flex uk-flex-wrap uk-flex-column padding-all-mobile uk-hidden@m">
-          <h1 class="uk-text-center uk-margin-medium-bottom">Emissions of {this.number_cows} cows in a day.</h1>
+          <h1 class="uk-text-center uk-margin-medium-bottom">Emissions of {this.state.number_cows} cows in a day.</h1>
           <div class="uk-flex uk-flex-middle uk-flex-center uk-flex-wrap">
-            {this.cows}
+            {this.state.cows}
           </div>
         </div>
 
         <div class="uk-section uk-flex uk-flex-wrap background-gradient-reversed uk-visible@m">
           <div class="uk-width-1-2 uk-flex uk-flex-middle uk-flex-center uk-flex-wrap padding-all">
-            {this.cows}
+            {this.state.cows}
           </div>
           <div class="uk-width-1-2 uk-flex uk-flex-middle uk-flex-center padding-all">
-            <h1>Emissions of {this.number_cows} <br /> cows in a day.</h1>
+            <h1>Emissions of {this.state.number_cows} <br /> cows in a day.</h1>
           </div>
         </div>
 
