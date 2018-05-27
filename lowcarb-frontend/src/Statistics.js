@@ -177,13 +177,13 @@ class Statistics extends Component {
     if (this.current > this.weeklyGoal) {
       const indicatorPosition = 100 * this.weeklyGoal / (this.current * 1.66);
       return (
-        <div class="uk-section uk-flex uk-flex-wrap background-gradient-30 indicator-container padding-all-mobile">
+        <div class="uk-section uk-flex uk-flex-wrap background-gradient-30 indicator-container padding-all-mobile progress-bar-padding">
           <div class="indicator" style={{ left: indicatorPosition + '%' }} />
           <div class="uk-width-1-2 uk-flex uk-flex-middle uk-flex-center uk-flex-wrap">
-            <h1>Current Week</h1>
+            <h1>Week</h1>
           </div>
           <div class="uk-width-1-2 uk-flex uk-flex-middle uk-flex-center">
-            <h2 class="uk-text-right">{this.current} / {this.weeklyGoal} Kilos CO2 produced</h2>
+            <h2 class="uk-text-right">{this.current} / {this.weeklyGoal} kg CO2</h2>
           </div>
         </div>
       );
@@ -191,7 +191,7 @@ class Statistics extends Component {
       const indicatorPosition = 100 * currentGoal / this.weeklyGoal;
       const currentProgress = 100 * this.current / this.weeklyGoal;
       return (
-        <div class="uk-section uk-flex uk-flex-wrap indicator-container padding-all-mobile" style={{
+        <div class="uk-section uk-flex uk-flex-wrap indicator-container padding-all-mobile progress-bar-padding" style={{
           background: '#F1E57C',
           background: `-moz-linear-gradient(45deg, #F1E57C ${currentProgress}%, #F2F2F2 ${currentProgress}%)`,
           background: `-webkit-linear-gradient(45deg, #F1E57C ${currentProgress}%, #F2F2F2 ${currentProgress}%)`,
@@ -199,10 +199,10 @@ class Statistics extends Component {
         }}>
           <div class="indicator" style={{ left: indicatorPosition + '%' }} />
           <div class="uk-width-1-2 uk-flex uk-flex-middle uk-flex-center uk-flex-wrap">
-            <h1>Current Week</h1>
+            <h1>Week</h1>
           </div>
           <div class="uk-width-1-2 uk-flex uk-flex-middle uk-flex-center">
-            <h2 class="uk-text-right">{this.current} / {this.weeklyGoal} Kilos CO2 produced</h2>
+          <h2 class="uk-text-right">{this.current} / {this.weeklyGoal} kg CO2</h2>
           </div>
         </div>
       )
@@ -210,17 +210,17 @@ class Statistics extends Component {
     } else {
       const currentProgress = 100 * this.current / this.weeklyGoal;
       return (
-        <div class="uk-section uk-flex uk-flex-wrap indicator-container padding-all-mobile" style={{
+        <div class="uk-section uk-flex uk-flex-wrap indicator-container padding-all-mobile progress-bar-padding" style={{
           background: '#96C8A9',
           background: `-moz-linear-gradient(45deg, #96C8A9 ${currentProgress}%, #F2F2F2 ${currentProgress}%)`,
           background: `-webkit-linear-gradient(45deg, #96C8A9 ${currentProgress}%, #F2F2F2 ${currentProgress}%)`,
           background: `linear-gradient(135deg, #96C8A9 ${currentProgress}%, #F2F2F2 ${currentProgress}%)`
         }}>
           <div class="uk-width-1-2 uk-flex uk-flex-middle uk-flex-center uk-flex-wrap">
-            <h1>Current Week</h1>
+            <h1>Week</h1>
           </div>
           <div class="uk-width-1-2 uk-flex uk-flex-middle uk-flex-center">
-            <h2 class="uk-text-right">{this.current} / {this.weeklyGoal} Kilos CO2 produced</h2>
+          <h4 class="uk-text-right">{this.current} / {this.weeklyGoal} kg CO2</h4>
           </div>
         </div>
       )
@@ -236,7 +236,7 @@ class Statistics extends Component {
         {this.indicatorTemplate()}
 
         <div class="uk-section uk-section-muted uk-padding-remove">
-          <div class="uk-container uk-margin-medium-top uk-margin-medium-bottom">
+          <div class="uk-container uk-margin-top uk-margin-bottom">
             <h1 class="uk-text-center">This is equivalent to:</h1>
           </div>
         </div>
