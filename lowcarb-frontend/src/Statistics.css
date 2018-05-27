@@ -1,3 +1,9 @@
+@media only screen and (max-width:640px) {
+  .padding-all-mobile {
+    padding: 25px;
+  }
+}
+
 .background-gradient {
 	background: #FFFFFF;
 	background: -moz-linear-gradient(left, #FFFFFF 50%, #F2F2F2 50%);
@@ -30,8 +36,8 @@
 .indicator {
   height: 100%;
   width: 5px;
-  background-color: #F2F2F2;
   position: absolute;
+  background-color: #F2F2F2;
   top: 0;
   z-index: 1;
 }
@@ -66,6 +72,14 @@
   width: 0%;
   height: 100%;
   right: 0;
+}
+
+.uk-section-default .fas:after{
+  background-color: #FFFFFF;
+}
+
+.uk-section-muted .fas:after{
+  background-color: #F8F8F8;
 }
 
 .fas.p90:after {

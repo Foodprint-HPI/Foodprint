@@ -168,9 +168,9 @@ class Statistics extends Component {
     const currentGoal = this.weeklyGoal / 7 * (currentDate.getDay() || 7);
     if (this.current > this.weeklyGoal) {
       const indicatorPosition = 100 * this.weeklyGoal / (this.current * 1.66);
-      return(
-        <div class="uk-section uk-flex uk-flex-wrap background-gradient-30 indicator-container">
-          <div class="indicator" style={{left: indicatorPosition + '%'}} />
+      return (
+        <div class="uk-section uk-flex uk-flex-wrap background-gradient-30 indicator-container padding-all-mobile">
+          <div class="indicator" style={{ left: indicatorPosition + '%' }} />
           <div class="uk-width-1-2 uk-flex uk-flex-middle uk-flex-center uk-flex-wrap">
             <h1>Current Week</h1>
           </div>
@@ -183,13 +183,13 @@ class Statistics extends Component {
       const indicatorPosition = 100 * currentGoal / this.weeklyGoal;
       const currentProgress = 100 * this.current / this.weeklyGoal;
       return (
-        <div class="uk-section uk-flex uk-flex-wrap indicator-container" style={{
+        <div class="uk-section uk-flex uk-flex-wrap indicator-container padding-all-mobile" style={{
           background: '#F1E57C',
           background: `-moz-linear-gradient(45deg, #F1E57C ${currentProgress}%, #F2F2F2 ${currentProgress}%)`,
           background: `-webkit-linear-gradient(45deg, #F1E57C ${currentProgress}%, #F2F2F2 ${currentProgress}%)`,
           background: `linear-gradient(135deg, #F1E57C ${currentProgress}%, #F2F2F2 ${currentProgress}%)`
         }}>
-          <div class="indicator" style={{left: indicatorPosition + '%'}} />
+          <div class="indicator" style={{ left: indicatorPosition + '%' }} />
           <div class="uk-width-1-2 uk-flex uk-flex-middle uk-flex-center uk-flex-wrap">
             <h1>Current Week</h1>
           </div>
@@ -202,7 +202,7 @@ class Statistics extends Component {
     } else {
       const currentProgress = 100 * this.current / this.weeklyGoal;
       return (
-        <div class="uk-section uk-flex uk-flex-wrap indicator-container" style={{
+        <div class="uk-section uk-flex uk-flex-wrap indicator-container padding-all-mobile" style={{
           background: '#96C8A9',
           background: `-moz-linear-gradient(45deg, #96C8A9 ${currentProgress}%, #F2F2F2 ${currentProgress}%)`,
           background: `-webkit-linear-gradient(45deg, #96C8A9 ${currentProgress}%, #F2F2F2 ${currentProgress}%)`,
@@ -233,17 +233,30 @@ class Statistics extends Component {
           </div>
         </div>
 
-        <div class="uk-section uk-flex uk-flex-wrap background-gradient-reversed">
+        <div class="uk-section uk-section-default uk-flex uk-flex-wrap uk-flex-column padding-all-mobile uk-hidden@m">
+          <h1 class="uk-text-center uk-margin-medium-bottom">{this.number_cars}km in a car.</h1>
+          <div class="uk-flex uk-flex-middle uk-flex-center uk-flex-wrap">
+            {this.cars}
+          </div>
+        </div>
+
+        <div class="uk-section uk-flex uk-flex-wrap background-gradient-reversed uk-hidden uk-visible@m">
           <div class="uk-width-1-2 uk-flex uk-flex-middle uk-flex-center uk-flex-wrap padding-all">
             {this.cars}
           </div>
           <div class="uk-width-1-2 uk-flex uk-flex-middle uk-flex-center padding-all">
             <h1>{this.number_cars}km in a car.</h1>
           </div>
-
         </div>
 
-        <div class="uk-section uk-flex uk-flex-wrap background-gradient">
+        <div class="uk-section uk-section-muted uk-flex uk-flex-wrap uk-flex-column padding-all-mobile uk-hidden@m">
+          <h1 class="uk-text-center uk-margin-medium-bottom">Yearly absorption by {this.number_trees} trees.</h1>
+          <div class="uk-flex uk-flex-middle uk-flex-center uk-flex-wrap">
+            {this.trees}
+          </div>
+        </div>
+
+        <div class="uk-section uk-flex uk-flex-wrap background-gradient uk-hidden uk-visible@m">
           <div class="uk-width-1-2 uk-flex uk-flex-middle uk-flex-center padding-all">
             <h1>Yearly absorption by {this.number_trees} trees.</h1>
           </div>
@@ -252,7 +265,14 @@ class Statistics extends Component {
           </div>
         </div>
 
-        <div class="uk-section uk-flex uk-flex-wrap background-gradient-reversed">
+        <div class="uk-section uk-section-default uk-flex uk-flex-wrap uk-flex-column padding-all-mobile uk-hidden@m">
+          <h1 class="uk-text-center uk-margin-medium-bottom">Emissions of {this.number_cows} cows in a week.</h1>
+          <div class="uk-flex uk-flex-middle uk-flex-center uk-flex-wrap">
+            {this.cows}
+          </div>
+        </div>
+
+        <div class="uk-section uk-flex uk-flex-wrap background-gradient-reversed uk-visible@m">
           <div class="uk-width-1-2 uk-flex uk-flex-middle uk-flex-center uk-flex-wrap padding-all">
             {this.cows}
           </div>
