@@ -35,6 +35,7 @@ class Meal(db.Model):
     created = db.Column(db.DateTime, default=db.func.current_timestamp())
     recipe = db.Column(db.String(512))
     picture = db.Column(db.String(512))
+    label = db.Column(db.String(100))
     dish_id = db.Column(db.Integer, db.ForeignKey('dish.id'))
     dish = db.relationship('Dish', lazy=False)
 

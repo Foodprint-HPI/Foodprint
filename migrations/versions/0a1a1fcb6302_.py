@@ -29,6 +29,7 @@ def upgrade():
     sa.Column('created', sa.DateTime(), nullable=True),
     sa.Column('recipe', sa.String(length=512), nullable=True),
     sa.Column('picture', sa.String(length=512), nullable=True),
+    sa.Column('label', sa.String(length=100), nullable=True),
     sa.Column('dish_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['dish_id'], ['dish.id'], ),
     sa.PrimaryKeyConstraint('id'),
