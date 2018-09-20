@@ -1,0 +1,116 @@
+@media only screen and (max-width:640px) {
+  .padding-all-mobile {
+    padding: 25px;
+  }
+  .progress-bar-padding {
+    padding-top: 20px !important;
+    padding-bottom: 0 !important;
+  }
+}
+
+.background-gradient {
+	background: #FFFFFF;
+	background: -moz-linear-gradient(left, #FFFFFF 50%, #F2F2F2 50%);
+	background: -webkit-linear-gradient(left, #FFFFFF 50%, #F2F2F2 50%);
+  background: linear-gradient(to right, #FFFFFF 50%, #F2F2F2 50%);
+}
+
+.background-gradient-reversed {
+	background: #FFFFFF;
+	background: -moz-linear-gradient(right, #FFFFFF 50%, #F2F2F2 50%);
+	background: -webkit-linear-gradient(right, #FFFFFF 50%, #F2F2F2 50%);
+  background: linear-gradient(to left, #FFFFFF 50%, #F2F2F2 50%);
+}
+
+.background-gradient-30 {
+	background: #96C8A9;
+	background: -moz-linear-gradient(45deg, #D16A76 66%, #F2F2F2 66%);
+	background: -webkit-linear-gradient(45deg, #D16A76 66%, #F2F2F2 66%);
+  background: linear-gradient(135deg, #D16A76 66%, #F2F2F2 66%);
+}
+
+.indicator-container {
+  position: relative;
+}
+
+.indicator-container h1 {
+  z-index: 2;
+}
+
+.indicator {
+  height: 100%;
+  width: 5px;
+  position: absolute;
+  background-color: #F2F2F2;
+  top: 0;
+  z-index: 1;
+}
+
+.width-limitiation {
+    max-width: 600px;
+}
+
+#statistics .icon {
+  font-size: 70px;
+  margin: 0 10px;
+  height: 85px;
+}
+
+#statistics .comparison h3 {
+  margin-top: 10px;
+}
+
+.padding-all {
+  padding: 80px;
+}
+
+.fas {
+  position: relative;
+}
+
+.fas:after {
+  top: 0;
+  content: "";
+  position: absolute;
+  background: #F2F2F2;
+  width: 0%;
+  height: 100%;
+  right: 0;
+}
+
+.uk-section-default .fas:after{
+  background-color: #FFFFFF;
+}
+
+.uk-section-muted .fas:after{
+  background-color: #F8F8F8;
+}
+
+.fas.p90:after {
+  width: 10%;
+}
+.fas.p80:after {
+  width: 20%;
+}
+.fas.p70:after {
+  width: 30%;
+}
+.fas.p60:after {
+  width: 40%;
+}
+.fas.p50:after {
+  width: 50%;
+}
+.fas.p40:after {
+  width: 60%;
+}
+.fas.p30:after {
+  width: 70%;
+}
+.fas.p20:after {
+  width: 80%;
+}
+.fas.p10:after {
+  width: 90%;
+}
+

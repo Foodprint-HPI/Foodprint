@@ -6,6 +6,7 @@ class Recorder extends Component {
 
   constructor(props) {
     super(props);
+    this.baseUrl = "https://veggiefy.herokuapp.com/api/v1/";
     this.startCamera = this.startCamera.bind(this);
     this.takePhoto = this.takePhoto.bind(this);
     this.displayErrorMessage = this.displayErrorMessage.bind(this);
@@ -13,9 +14,10 @@ class Recorder extends Component {
     this.takeSnapshot = this.takeSnapshot.bind(this);
     this.sendPhoto = this.sendPhoto.bind(this);
     this.handleMealChange = this.handleMealChange.bind(this);
+    this.fetchCO2 = this.fetchCO2.bind(this);
     this.availableMeals = ["Breakfast", "Lunch", "Coffee", "Dinner", "Other"];
     this.state = {
-      errorMessage: "",
+      errorMessage: <div />,
       meal: "Coffee",
       mealSelectionActive: true
     }
@@ -24,6 +26,16 @@ class Recorder extends Component {
   handleMealChange(newMeal) {
     this.setState({
       meal: newMeal
+    });
+  }
+
+  fetchCO2(data) {
+    fetch(this.baseUrl + 'meal/' + data.hash_id, {
+      method: "GET",
+    }).then(response => {
+      response.json().then(data => {
+        this.displayErrorMessage(<span><span style={{textTransform: 'capitalize'}}>{data.name}</span> ({data.co2} kg CO<sub>2</sub>)</span>);
+      });
     });
   }
 
@@ -37,7 +49,7 @@ class Recorder extends Component {
 
 
       if (!navigator.getMedia) {
-        this.displayErrorMessage("Your browser doesn't have support for the navigator.getUserMedia interface.");
+        //this.displayErrorMessage("Your browser doesn't have support for the navigator.getUserMedia interface.");
       } else{
 
         // Request the camera.
@@ -54,7 +66,7 @@ class Recorder extends Component {
         }.bind(this),
         // Error Callback
         function(err){
-          this.displayErrorMessage("There was an error with accessing the camera stream: " + err.name, err);
+          //this.displayErrorMessage("There was an error with accessing the camera stream: " + err.name, err);
         }.bind(this)
       );
 
@@ -63,15 +75,17 @@ class Recorder extends Component {
 
   startCamera(event) {
     event.preventDefault();
-    this.refs.startButton.classList.remove("visible")
+    this.refs.startButton.classList.remove("visible");
     this.refs.cameraStream.play();
     this.showVideo();
   }
 
   displayErrorMessage(text) {
+    this.refs.errorMessage.classList.add("visible");
     this.setState({
       errorMessage: text
     });
+    console.log(this.state);
   }
 
   takePhoto(event) {
@@ -174,21 +188,21 @@ class Recorder extends Component {
       array.push(blobBin.charCodeAt(i));
     }
     var file=new Blob([new Uint8Array(array)], {type: 'image/png'});
-    console.log(file);
 
     var data = new FormData();
     data.append('photo', file);
     data.append('meal', this.state.meal);
 
-    fetch('https://veggiefy.herokuapp.com/upload', {
+    fetch(this.baseUrl + 'upload', {
       method: 'POST',
       body: data
     }).then(response => {
-      console.log(response);
-      if (response.status === 200) {
+      if (response.status === 201 || response.status === 200) {
         this.refs.deletePhoto.classList.add("disabled");
         this.refs.sendPhoto.classList.add("green");
+        response.json().then(data => this.fetchCO2(data));
       } else {
+        console.log(response)
         this.refs.sendPhoto.classList.add("red");
       }
     }).catch(error => {
@@ -200,6 +214,7 @@ class Recorder extends Component {
   render() {
 
     return (
+      <div style={{"height": "calc(100vh - 80px)", "display": "flex", "alignItems": "center", "width": "100%"}}>
       <div className="app container">
           <div className="uk-inline" style={{width: "100%"}}>
         <button className="uk-button uk-button-default" type="button" style={{width: "100%", marginBottom: "10px"}}>{this.state.meal}</button>
@@ -217,11 +232,9 @@ class Recorder extends Component {
     </div>
 
       <a href="#" id="start-camera" className="visible" onClick={this.startCamera} ref="startButton">Touch here to start the camera.</a>
-      <div style={{"position": "relative"}}>
+      <div style={{"position": "relative", "overflow": "hidden", "width": "80vw", "height": "80vw", "margin":"auto"}}>
       <video id="camera-stream" ref="cameraStream"></video>
       <img ref="image" id="snap" />
-      </div>
-      <div style={{"position": "relative"}}>
       <div className="controls" ref="controls">
       <a href="#" id="delete-photo" title="Delete Photo" className="disabled" onClick={this.deletePhoto} ref="deletePhoto"><i className="far fa-trash-alt"></i></a>
       <a href="#" id="take-photo" title="Take Photo" onClick={this.takePhoto} ref="takePhoto"><i className="fas fa-camera"></i></a>
@@ -230,8 +243,9 @@ class Recorder extends Component {
       <canvas ref="canvas"></canvas>
       </div>
       <div style={{"position": "relative"}}>
-      <div ref="errorMessage" id="error-message">
+      <a href="/statistics" style={{"textDecoration": "none"}}><div ref="errorMessage" id="error-message">
       {this.state.errorMessage}
+      </div></a>
       </div>
       </div>
       </div>
