@@ -69,7 +69,7 @@ class Recorder extends Component {
       console.log('navigator.mediaDevices.getUserMedia was straight found alright!')
     }
 
-    navigator.mediaDevices.getUserMedia({ audio: false, video: true })
+    navigator.mediaDevices.getUserMedia({ audio: false, video: {facingMode: "environment" } })
     .then(function(stream) {
       console.log('We got the stream!')
       // Older browsers may not have srcObject
