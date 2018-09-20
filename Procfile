@@ -1,1 +1,1 @@
-web: cd lowcarb-frontend && npm install && npm start
+web: bash ./run.sh
